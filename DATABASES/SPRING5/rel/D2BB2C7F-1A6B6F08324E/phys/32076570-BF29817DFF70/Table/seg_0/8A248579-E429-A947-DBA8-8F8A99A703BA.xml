@@ -1,0 +1,48 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev11g class="oracle.dbtools.crest.model.design.storage.oracle.v11g.TableProxyOraclev11g" name="TBL_ATTACH" directorySegmentName="seg_0" id="8A248579-E429-A947-DBA8-8F8A99A703BA">
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 04:58:24 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="REG_DATE" id="24370781-D653-EB4E-420A-7E6455C56BAA">
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 05:05:13 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="REAL_FILE_NAME" id="25866F9B-F8FB-8D0A-F48F-23435967F718">
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 05:04:21 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="BNO" id="A41382EE-5186-8A09-1349-B25BE46EF575">
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 05:07:11 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="SAVE_FILE_NAME" id="CBF38720-06D2-3F00-A4D6-AF10AB99D343">
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 05:00:37 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<foreignKeys>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="TBL_ATTACH_TBL_BOARD_FK" id="ECC18181-FE7E-1E4E-2B44-AF59B2AAF37D">
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 05:07:59 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+</ForeignKey>
+</foreignKeys>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="TBL_ATTACH_PK" id="95DB7ED7-2145-2A8B-0780-87271D9CD966">
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 05:04:21 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev11g>
