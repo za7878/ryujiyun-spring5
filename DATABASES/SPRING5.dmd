@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="SPRING5" id="19CB4672-0FC4-6F80-AB8F-EBD9FD6EB1E9" version="3.5">
+<createdBy>User</createdBy>
+<createdTime>2021-05-31 01:25:46 UTC</createdTime>
+<ownerDesignName>SPRING5</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>19CB4672-0FC4-6F80-AB8F-EBD9FD6EB1E9</designId>
+</OSDM_Design>
