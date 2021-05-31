@@ -420,7 +420,7 @@
 		</data_types_model_estimates>
 		<relational_model_estimates>
 			<relational_model_0_estimates>
-				<relational_model_name value="String5"/>
+				<relational_model_name value="Spring5"/>
 				<tables value="70"/>
 				<views value="70"/>
 				<foreign_keys value="70"/>
