@@ -4,6 +4,15 @@
 - 피곤할 때, 오라클DB(SQL디벨러퍼 개발환경)Ansi-SQL(표준SQL)기본언어 실습진행 CRUD
 - 2달 째 부터(백엔드), 주로 스프링 실습이 진행 (납품용-이력서 포트폴리오용)
 - VS code에서 만든 UI를 JSP로 변경 한 후 스프링웹프로젝트를 진행
+- 작업비중 (시간) = 관리단프로그램(70%)+사용자단(30%)
+
+#### 20210603(목) 작업내용.
+- 1. jdbc(Java DabaBase Connection) 확장 모듈 pom에 추가
+- 2. 오라클 접속 드라이버 확장 모듈을 pom에 추가X 직접 jar 파일을 추가.
+- root-context.xml 파일에 오라클 커넥션 빈(스프링클래스)을 추가.
+- 스프링이 관리하는 클래스를 추가하는 방법 2-1 :@Cntroller, @Repository, @Service, @Component
+- 스프링이 관리하는 클래스를 추가하는 방법 2-2 : -context.xml 에서 빈(bean태그)을 추가하면, 스프링 클래스가 됨.
+- Junit테스트 : 오라클 연동후
 
 #### 20210602(수) 작업예정.
 - views/home/index.jsp 엑박처리 후 분해(header.jsp,footer.jsp, index.jsp)
