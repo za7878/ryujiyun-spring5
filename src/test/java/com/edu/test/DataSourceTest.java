@@ -2,7 +2,9 @@ package com.edu.test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -38,8 +40,27 @@ public class DataSourceTest {
 		//스프링빈을 사용하지 않을 때 예전방식: 코딩테스트에서는 스프링설정을 안쓰고, 직접 DB 아이디/암호 입력.
 		Connection connection = null;
 		connection = DriverManager.getConnection
-				("jdbc:oracle:thin:@localhost:1521/XE");
+				("jdbc:oracle:thin:@localhost:1521/XE","XE","apmsetup");
+		logger.debug("데이터베이스 직접접근이 성공되었습니다");
+		//직접 뭐리를 날린다. 날리기 전, 쿼리문자 객체생성 statement
+		Statement stmt = connection.createStatement();
+		//위 쿼리문장 객체를 만드는 이유? 보안(SQL인젝션 공격을 방지)
+		//stmt객체가 없으면, 개발자가 SQL인젝션 방지코딩을 넣어야 함.
+		//Insert쿼리문장만듬(아래)
+		/*
+		 * for(int cnt=0; cnt<100; cnt++) {
+		 * stmt.executeQuery("insert into dept02 values("+cnt+",'디자인부','경기도')"); }
+		 */
+		//테이블에 입력되어 있는 레코드셋을 select 쿼리 stmt문장으로 가져옴(아래)
+		ResultSet rs = stmt.executeQuery("select * from dept order by deptno");
+		//위에서 저장된 rs객체를 반복문으로 출력(아래)
+		while(rs.next())
+			//rs객체의 레코드가 없을때 까지 반복
+			logger.debug(rs.getString("deptno")+" "+rs.getString("dname")+
+			" "+rs.getString("loc"));
 		
+		stmt = null;//메모리 반환
+		rs = null;//메모리 반환
 		connection = null; //메모리 초기화
 	}
 	@Test
