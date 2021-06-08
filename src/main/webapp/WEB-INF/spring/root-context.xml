@@ -2,28 +2,31 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
-		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	<!-- 알리아스Alias(별명) dataSource로 만든다. 이유? 여러개의 DB와 호환되게 만들게 됨.
-		오라클, Mysql, Hsql 등 여러 DB서버와 호환되게 만드는데 필요(아래) -->
-		<alias name="dataSource-oralce_local" alias="dataSource"/>
-		<!-- 로컬(PC) Hsql용 헤로쿠클라우드에 배포용 드라이버 설정(나중에) -->
-		
-	<!-- 로컬 (PC) 오라클 jdbc 드라이버 설정(아래) -->
+	<!-- 알리아스 Alias(별명) dataSource로 만듭니다.이유? 여러개의 DB와 호환되게 만들게됩니다. -->
+	<!-- 오라클, Mysql, Hsql 등 여러 DB서버와 호환되게 만드는데 필요(아래) -->
+	<alias name="dataSource-oracle_local" alias="dataSource"/>
+	<!-- 로컬(PC) Hsql용-헤로쿠클라우드에 배포용 드라이버 설정(나중에) -->
+
+	<!-- 로컬(PC) 오라클 jdbc 드라이버 설정(아래) -->
 	<!-- 
-		<bean id="dataSource-oracle_local" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<bean id="dataSource-oracle_local" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" 
 				  value="oracle.jdbc.driver.OracleDriver"></property>
 		<property name="url" 
 				  value="jdbc:oracle:thin:@localhost:1521/XE"></property>
 		<property name="username" value="XE"></property>
 		<property name="password" value="apmsetup"></property>
-	</bean> -->
+	</bean>
+	 -->
+	 <!-- 로컬(PC) 오라클 log4jdbc 드라이버 설정(아래) -->
 	
-	<!-- 로컬 (PC) 오라클 log4jdbc 드라이버 설정(아래) -->
-		<bean id="dataSource-oracle_local" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<bean id="dataSource-oracle_local" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" 
 				  value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
 		<property name="url" 
@@ -33,16 +36,20 @@
 	</bean>
 	
 	<!-- 위 오라클 jdbc빈을 스프링-마이바티스 에서 사용(아래) -->
-	<!-- SQL세션 팩토리(공장) 클래스를 빈으로 생성: 쿼리를 찍어낼 수 있는 메서드가 있는 클래스 -->
-	 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">	   
+	<!-- SQL세션팩토리(공장)클래스를 빈으로 생성: 쿼리를 찍어낼수 있는 메서드가 있는 클래스 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">	   
 	 	<property name="dataSource" ref="dataSource" />
 	 	<!-- 매퍼 xml로만든 쿼리파일의 경로를 인식하게 함.(아래 classpath경로 src/main/resources/쿼리xml) -->
 	 	 <property name="mapperLocations" value="classpath:mappers/**/oracle/*Mapper.xml"></property>
 	</bean>
-	 <!-- 위 SQL세션팩토리를 이용해서 템플릿 클래스를 생성(insert(), update(),
-	 delete()등의 메서드를 사용할 수 있는 클래스:세션이름인 이유는 쿼리 접속정보/해제 정보를 관리하기 때문에-->
-	 <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+	<!-- 위 SQL세션팩토리를 이용해서 템플릿클래스를 생성(insert(),select(),update(),
+	delete()등의 메서드를 사용할수 있는 클래스:세션이름인 이유는 쿼리 접속정보/해제정보를 관리하기 때문에 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
 	  <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
-	 </bean>
-	 
+	</bean>
+	
+	<!-- 클래스를 스프링빈으로 등록하기위한 클래스 위치 지정 -->
+	<context:component-scan base-package="com.edu.dao" />
+	<context:component-scan base-package="com.edu.service" />
+	
 </beans>
