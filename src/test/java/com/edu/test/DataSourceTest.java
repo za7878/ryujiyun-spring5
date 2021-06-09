@@ -19,6 +19,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.edu.service.IF_MemberService;
 import com.edu.vo.MemberVO;
+import com.edu.vo.PageVO;
 
 /**
  * 이 클래스는 오라클과 연동해서 CRUD를 테스트 하는 클래스 이다.
@@ -41,11 +42,28 @@ public class DataSourceTest {
 	@Inject //MemberSerivce서비스를 주입 받아서 객체를 사용함.(아래)
 	private IF_MemberService memberService;
 	
+	@Test
+	public void deleteMember() throws Exception {
+		memberService.deleteMember("user_del");
+		selectMember();
+	}
+	
+	@Test
+	public void insertMember() throws Exception {
+		MemberVO memberVO = new MemberVO();
+		//insert쿼리에 저장할 객체
+		memberVO.setUser_id("user_del");
+		memberVO.setUser_pw("1234");//스프링시큐리티5버전으로 암호화로 처리 예정.
+		memberVO.setEmail("user@test,com");
+		memberVO.setPoint(10);
+		memberVO.setEnabled(true);
+		memberVO.setLevels("ROLE_USER");
+		memberVO.setUser_name("삭제할 사용자");
+		memberService.insertMember(memberVO);
+		selectMember();
+	}
+	
 	//스프링 코딩 시작 순서
-	// M-V-C 사이에 데이터를 입출력하는 임시저장 공간(VO클래스-멤버변수+Get/Set메서드)생성.
-	//보통 ValueObject클래스는 DB테이블과 1:1로 매칭이 됨.
-	//그래서, 1. MemberVO.java VO클래스를 생성.(필수)
-	//2. DB(마이바티스)쿼리를 만듬.(VO사용됨.) - 내일 부터 시작.
 	
 	@Test
 	public void selectMember() throws Exception {
@@ -55,7 +73,20 @@ public class DataSourceTest {
 		//변수를 2~3이상은 바로 String변수로 처리 하지 않고, VO만들어 사용.
 		//PageVO.java클래스를 만들어서 페이징처리 변수와 검색어변수 선언, Gst/Set생성
 		//PageVO만들기 전 SQL쿼리로 가상으로 페이징을 한 번 구현해 보며, 필요한 변수 만들어야 함.
-		List<MemberVO> listMember = memberService.selectMember();
+		//pageVO 객체를 만들어서 가승으로 초기값을 입력(아래)
+		PageVO pageVO = new PageVO();
+		pageVO.setPage(1);//기본값으로 1페이지를 입력
+		pageVO.setPerPageNum(10);//UI하단사용 페이지 갯수
+		pageVO.setQueryPerPageNum(10);//쿼리사용 페이지당 갯수
+		pageVO.setTotalCount(memberService.countMember());//테스트 하려고, 100명을 입력함.
+		pageVO.setSearch_type("user_id");
+		pageVO.setSearch_keyword("user_del");
+		//위 setTotalCount위치가 다른 설정보다 상단이면, 에러발생. 왜냐하면, calcPage()가 실행되는데 실행 시 위 3가지 변수값이 저장 돼 있어야지 계산메서드가 정상 작동되기 때
+		//위 토탈카운트 변수값은 StartPage, endPage계산에 필수.
+		//매퍼쿼리_DAO클래스_Service클래스_JUnit(나중엔 컨트롤러에서 작업) 이제 역순으로 작업진행
+		//더 진행하기 전에 현재 pageVO객체에는 어떤 값이 들어 있는지 확인하고 사용.(아래)
+		logger.info("pageVO저장된 값 확인:"+pageVO.toString());
+		List<MemberVO> listMember = memberService.selectMember(pageVO);
 		listMember.toString();
 	}
 	
