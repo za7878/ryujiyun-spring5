@@ -12,9 +12,9 @@ import com.edu.vo.PageVO;
 
 /**
  * 이 클래스는 회원관리 서비스 인터페이스를 구현하는 클래스.
- * 상속 extends, 구현implements 키워드를 사용.
- * 스프링빈으로 등록하려면, @Service 에너테이션을 명시.
- * @author 유지윤
+ * 상속 extends, 구현 implements 키워드를 사용
+ * 스프링빈으로 등록하려면, @Service 애너테이션을 명시.
+ * @author 김일국
  *
  */
 @Service
@@ -33,16 +33,17 @@ public class MemberServiceImpl implements IF_MemberService {
 		// 인젝션으로 주입받은 DAO객체를 사용(아래)
 		return memberDAO.countMember(pageVO);
 	}
+
 	@Override
 	public void insertMember(MemberVO memberVO) throws Exception {
+		// 클래스 상단에서 인젝션으로 주입받느 DAO객체를 사용(아래)
 		memberDAO.insertMember(memberVO);
 	}
 
 	@Override
 	public void deleteMember(String user_id) throws Exception {
-		// TODO Auto-generated method stub
+		// 클래스 상단에서 인젝션으로 주입받은 DAO객체를 사용(아래)
 		memberDAO.deleteMember(user_id);
-		
 	}
 
 	@Override
@@ -53,8 +54,8 @@ public class MemberServiceImpl implements IF_MemberService {
 
 	@Override
 	public void updateMember(MemberVO memberOne) throws Exception {
-		// DAO호출 (아래)
+		// DAO 호출(아래)
 		memberDAO.updateMember(memberOne);
-		
 	}
-	}
+
+}

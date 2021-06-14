@@ -139,4 +139,4 @@
     </div>
     <!-- /.sidebar -->
   </aside>
-<!-- 여기까지 header.jsp부분 -->
+<!-- 여기까지 header.jsp영역 -->

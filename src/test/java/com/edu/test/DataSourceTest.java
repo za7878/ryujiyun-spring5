@@ -132,7 +132,7 @@ public class DataSourceTest {
 		pageVO.setPage(1);//기본값으로 1페이지를 입력
 		pageVO.setPerPageNum(10);//UI하단사용 페이지 갯수
 		pageVO.setQueryPerPageNum(1000);//쿼리사용 페이지당 갯수
-		pageVO.setTotalCount(memberService.countMember());//테스트 하려고, 100명을 입력함.
+		pageVO.setTotalCount(memberService.countMember(pageVO));//테스트 하려고, 100명을 입력함.
 		/* 모든 사용자를 출력하지 않고, 일부 사용자만 출력할 때, 아래 2줄 필요.
 		pageVO.setSearch_type("user_id");
 		pageVO.setSearch_keyword("user_del");
