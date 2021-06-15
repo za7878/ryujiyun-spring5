@@ -1,0 +1,1 @@
+select length(user_pw) from tbl_member

@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<!-- Ctrl+Space 우르면 입력힌트 출력 -->
-<!-- 이 매퍼는 2개의 객체를 바인딩 시키는 것을 매핑이라고 함.
+<!-- Ctrl+Space 누르시면 입력힌트가 출력 -->
+<!-- 이 매퍼는 2개의 객체를 바인딩시키는 것을 매핑이라고 합니다.
 이 매퍼는 회원관리 CRUD(입력,조회,수정,삭제)를 처리하는 쿼리를 모아놓은 파일.
- 이번주 조회기능 중 검색기능, 페이징 처리기능을 실습하는 것이 핵심.
+이번주 조회기능중 검색기능, 페이징처리기능을 실습하시는 것이 핵심.
  -->
 <mapper namespace="memberMapper">
-<!-- 공통쿼리 마이바티스 include문 사용 -->
-<!-- if조건문에서 test조건부분에 문자열비교시 '문자열' .toString()형변환 함수는 필수 필요 없으면 비교 불가.
-다음처럼 비교해도 가능. test="''.equals(search_type)", 지금사용/x 스프링클래스에서 사용O
-참고로 equals메서드를 사용하면 null비교까지 포함 됨. -->
+<!-- 공통쿼리 마이바티스 include문사용, 
+if조건문에서 test조건부분에 문자열비교시 '문자열'.toString()형변환함수는 필수 필요 없으면 비교불가. 
+다음처럼 비교해도 가능합니다. test="''.equals(search_type)", 지금사용X 스프링클래스에서 사용O
+참고로 equals메서드를 사용하면 null비교까지 포함 됩니다.
+-->
 <sql id="sqlWhere">
- <if test="search_type != '' and search_type != null">
-	       WHERE
-	       	<if test="search_type == 'all'.toString()">
-		        user_id LIKE '%'||#{search_keyword}||'%'
-		        OR user_name LIKE '%'||#{search_keyword}||'%'
-	        </if>
-	        <if test="search_type == 'user_id'.toString()">
-	        user_id LIKE '%'||#{search_keyword}||'%'
-	       	</if>
-	   		<if test="search_type == 'user_name'.toString()">
-	        user_name LIKE '%'||#{search_keyword}||'%'
-	        </if>
-        </if>
+	<if test="search_type != '' and search_type != null">
+    WHERE 
+    	 <if test="search_type == 'all'.toString()">
+		    user_id LIKE '%'||#{search_keyword}||'%'
+		    OR user_name LIKE '%'||#{search_keyword}||'%'
+	     </if>
+	     <if test="search_type == 'user_id'.toString()">
+	     	user_id LIKE '%'||#{search_keyword}||'%'
+	     </if>
+	     <if test="search_type == 'user_name'.toString()">
+	     	user_name LIKE '%'||#{search_keyword}||'%'
+	     </if>
+    </if>
 </sql>
-<!-- jsp수정페이지에 수정할 내용을 입력하는 쿼리(아래)
-사용자 정보 ㅅ ㅜ정시 매번 암호를 넣지 않기 때문에, 조건을 달아서 암호변경값이 있을 때만 수정되게 처리 -->
+<!-- jsp수정페이지에 수정할 내용을 입력하는 쿼리(아래) 
+사용자 정보 수정시 매번 암호를 넣지 않기 때문에, 조건을 달아서 암호변경값이 있을때만 수정되게 처리
+-->
 <update id="updateMember">
 	update tbl_member set
 	email = #{email},
@@ -44,13 +46,13 @@
 <select id="readMember" resultType="com.edu.vo.MemberVO">
 select * from tbl_member where user_id = #{user_id}
 </select>
-<!-- jsp폼에서 전송받은 user_id값의 데이터를 이용해서 DB에 해딩레코드를 삭제(아래) -->
+<!-- jsp폼에서 전송받은 user_id값의 데이터를 이용해서 dB에 해당레코드를 삭제(아래) -->
 <delete id="deleteMember">
 delete from tbl_member where user_id = #{user_id}
 </delete>
-<!-- jsp폼에서 전송받은 memberVO객체의 데이터를 DB에 insert한다(아래) -->
+<!-- jsp폼에서 전송받은 memberVO객체의 데이터를 DB에 insert합니다(아래) -->
 <insert id="insertMember">
-insert into tbl_member
+insert into tbl_member 
 (
 user_id,
 user_pw,
@@ -60,8 +62,8 @@ point,
 enabled,
 levels,
 reg_date
-)
-values
+) 
+values 
 (
 #{user_id},
 #{user_pw},
@@ -74,23 +76,23 @@ systimestamp
 )
 </insert>
 <!-- 현재처럼 무조건 갯수를 구하면, 검색결과에 대한 페이징 값을 구할 수 없음.
-그래서 검색이 포함된 카운트 갯수가 나와야 함. -->
+그래서 검색이 포함된 카우트개수가 나와함. 아래쿼리는 검색한 전체개수를 구한쿼리 
+이 결과를 PageVO클래스의 calcPage()메서드 사용 -->
 <select id="countMember" resultType="int">
-select count(*) from tbl_member
-<include refid="sqlWhere" />
+	select count(*) from tbl_member
+	<include refid="sqlWhere" />
 </select>
 <!-- pageVO 받아서 처리하는 조회 쿼리 -->
 <select id="selectMember" resultType="com.edu.vo.MemberVO">
-
 SELECT TableB.* FROM
 (
     SELECT ROWNUM AS RNUM, TableA.* FROM
     (
         SELECT * FROM tbl_member
-       <include refid="sqlWhere" />
+        <include refid="sqlWhere" />
         ORDER BY reg_date DESC
     ) TableA
-    <![CDATA[
+<![CDATA[ 
     WHERE ROWNUM <= (#{queryStartNo}*#{queryPerPageNum})+#{queryPerPageNum}
 ) TableB WHERE TableB.RNUM > #{queryStartNo}*#{queryPerPageNum}
 ]]>

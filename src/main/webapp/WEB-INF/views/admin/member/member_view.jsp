@@ -35,7 +35,7 @@
           <!-- /.card-header -->
           <!-- form start -->
           <!-- 첨부파일을 전송할때 enctype=필수 없으면, 첨부파일이 전송X -->
-          <form id="form_view" name="form_view" action="/admin/member/member_update" method="post" enctype="multipart/form-data">
+          <form id="form_view" name="form_view" action="/admin/member/member_update_form" method="get" enctype="multipart/form-data">
             <div class="card-body">
               <div class="form-group">
                 <label for="exampleInputEmail1">사용자ID</label>
@@ -76,7 +76,7 @@
             <!-- /.card-body -->
 
             <div class="card-footer text-right">
-              <button type="submit" class="btn btn-primary">수정</button>
+              <button type="submit" class="btn btn-primary">수정폼</button>
               <button type="button" class="btn btn-danger" id="btn_delete">삭제</button>
               <button type="button" class="btn btn-default" id="btn_list">목록</button>
               <!-- 목록으로 이동하려면, pageVO도 가져야 합니다. 또한 삭제/수정 보안때문에 
@@ -99,6 +99,14 @@
 <!-- 관리자단은 jQuery코어가 하단 footer에 있기 때문에 여기에 위치합니다. -->
 <script>
 $(document).ready(function(){
+	$("#btn_delete").click(function(){
+		if(confirm("정말로 삭제하시겠습니까?")) {
+			//위 컨펌대화상자에서 예,를 누르면, 아래 부분이 실행됨.(아니오, 건너띔)
+			$("#form_view").attr("action","/admin/member/member_delete");
+			$("#form_view").attr("method","post");
+			$("#form_view").submit();
+		}
+	});
 	$("#btn_list").click(function(){
 		var queryString = 'page=${pageVO.page}&search_type=${pageVO.search_type}&search_keyword=${pageVO.search_keyword}';
 		//alert(queryString);//디버그
