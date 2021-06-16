@@ -25,7 +25,22 @@
 - ======== 2주간 작업내역 끝(07.16금) ===================
 - 헤로쿠 클라우드에 배포할때, 매퍼폴더의 mysql폴더내의 쿼리에 now()를 date_add(now(3), interval 9 HOUR) 변경예정.(이유는 DB서버 타임존 미국이기 때문에)
 
-#### 20210616(수) 작업예정
+#### 20210617(목) 작업예정
+- 관리자단 게시판 생성관리 RU 페이지 마무리 예정.
+- 관리자단 게시판 생성관리 D 처리 (3. 스프링의 AOP기능구현)
+- UI 디자인 과제물 제출
+- 관리자단 게시물관리 CRUD처리 (4. 파일 업로드 구현, 5. 트랜잭션구현)
+
+#### 20210616(수) 작업내용
+오전에 작업한 파일4가지 입니다.
+- 1게시판생성관리VO파일: https://github.com/miniplugin/kimilguk-spring5/blob/master/src/main/java/com/edu/vo/BoardTypeVO.java
+- 2게시판생성관리매퍼파일: https://github.com/miniplugin/kimilguk-spring5/blob/master/src/main/resources/mappers/oracle/boardTypeMapper.xml
+- 3게시판생성관리DAO파일(인터페이스별도): https://github.com/miniplugin/kimilguk-spring5/blob/master/src/main/java/com/edu/dao/BoardTypeDAOImpl.java
+- 4게시판생성관리Service파일(인터페이스별도): https://github.com/miniplugin/kimilguk-spring5/blob/master/src/main/java/com/edu/service/BoardTypeServiceImpl.java
+
+- 10년, 20년, 지금 변하지 않는 것은 변수값의 흐름은 변함이 없음. 정방향 개발 시작. 
+-----------------------------------------------------
+- 시작.VO ->매퍼쿼리xml ->DAO클래스생성->Service클래스 생성->컨트롤러->jsp화면처리
 
 #### 20210615(화) 작업예정.
 - 관리자단 회원관리 수정 암호 수정 잘 되는지 확인예정.
