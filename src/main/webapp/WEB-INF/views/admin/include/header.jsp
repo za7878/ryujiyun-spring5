@@ -21,12 +21,10 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
   <!-- Preloader A로고 로딩중...표시 -->
   <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="/resources/admin/dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
   </div>
-
   <!-- Navbar 햄버거메뉴 라인 부분 -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links 왼쪽 햄버거 메뉴와 Home링크메뉴 -->
@@ -49,7 +47,6 @@
     </ul>
   </nav>
   <!-- /.navbar -->
-
   <!-- Main Sidebar Container 왼쪽 사이드메뉴내용 -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -57,7 +54,6 @@
       <img src="/resources/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">스프링5프로젝트</span>
     </a>
-
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user panel (optional) 로그인한 정보 -->
@@ -69,7 +65,6 @@
           <a href="#" class="d-block">로그인한 ID</a>
         </div>
       </div>
-
       <!-- SidebarSearch Form 검색폼 -->
       <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
@@ -81,7 +76,6 @@
           </div>
         </div>
       </div>
-
       <!-- Sidebar Menu 메뉴시작 -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -104,6 +98,7 @@
             </a>
           </li>
           <li class="nav-item">
+            <a href="#" class="nav-link">
             <a href="/admin/bbs_type/bbs_type_list" class="nav-link">
               <i class="far fa-circle nav-icon"></i>
               <p>게시판생성관리</p>

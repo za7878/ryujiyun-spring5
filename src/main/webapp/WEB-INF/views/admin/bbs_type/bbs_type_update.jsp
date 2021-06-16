@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="../include/header.jsp" %>
 
- <!-- Content Wrapper. Contains page content -->
+  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -33,27 +33,22 @@
           </div>
           <!-- /.card-header -->
           <!-- form start -->
-          <!-- 첨부파일을 전송할 때 enctype=필수 없으면, 첨부파일이 전송X -->
+          <!-- 첨부파일을 전송할때 enctype=필수 없으면, 첨부파일이 전송X -->
           <form name="form_write" action="board_write.html" enctype="multipart/form-data">
             <div class="card-body">
-              <div class="board_type">
-                <label for="title">게시판타입</label>
-                <input value="${boardTypeVO.board_type}" name="board_type" type="text" class="form-control" id="board_type">
+              <div class="form-group">
+                <label for="board_type">게시판타입</label>
+                <input value="${boardTypeVO.board_type}" name="board_type" type="text" class="form-control" id="board_type" placeholder="게시판타입을 입력해 주세요" required>
               </div>
               <div class="form-group">
-                <label for="title">글 제목</label>
-                <input name="title" type="text" class="form-control" id="title" placeholder="제목을 입력해주세요" required>
+                <label for="board_name">게시판이름</label>
+                <input value="${boardTypeVO.board_name}" name="board_name" type="text" id="board_name" class="form-control" placeholder="게시판명을 입력해주세요." required>
               </div>
               <div class="form-group">
-                <label for="content">글내용</label>
-                <textarea name="content" id="content" class="form-control" placeholder="내용을 입력해주세요." required></textarea>
+                <label for="board_sun">출력순서</label>
+                <input value="${boardTypeVO.board_sun}" name="board_sun" type="text" class="form-control" id="board_sun" placeholder="출력순서를 입력해 주세요" required>
               </div>
-              <div class="form-group">
-                <label for="writer">작성자</label>
-                <input name="writer" type="text" class="form-control" id="writer" placeholder="작성자를 입력해주세요" required>
-              </div>
-              <div class="form-group">
-              
+
             </div>
             <!-- /.card-body -->
 
@@ -70,4 +65,4 @@
   </div>
   <!-- /.content-wrapper -->
 
-<%@ include file="../include/footer.jsp" %>
+<%@ include file="../include/footer.jsp" %> 
