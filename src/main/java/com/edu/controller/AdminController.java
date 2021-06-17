@@ -43,7 +43,8 @@ public class AdminController {
 	//왜 board_type 하지 않고, bbs_type하는 이유는 왼쪽 메뉴 고정시키는 로직에서 경로 board와 겹치지 않도록
 	@RequestMapping(value="/admin/bbs_type/bbs_type_list", method=RequestMethod.GET)
 	public String selectBoardTypeList(Model model) throws Exception {//목록폼1
-		model.addAttribute("listBoardTypeVO",boardTypeService.selectBoardType());
+		//아래 모델은 AOP기능 중 ControllerAdvice 인터페이스로 구현했기 떄문에 아래는 실행안함.
+		//model.addAttribute("listBoardTypeVO",boardTypeService.selectBoardType());
 		return "admin/bbs_type/bbs_type_list";//상대경로일 때 views폴더가 최상위 root(최상위)
 	}
 	//bbs_type_list.jsp에서 게시판생성 버틍르 클릭했을 때 이동하는 폼 경로
