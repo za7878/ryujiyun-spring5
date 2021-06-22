@@ -9,8 +9,8 @@ SELECT TableB.* FROM
         and (title LIKE '%%'
         OR content LIKE '%%')
         ORDER BY reg_date DESC
-    ) TableA WHERE ROWNUM <= (1*5)+ 5 -- 0부터 선택한 페이지까지
-) TableB WHERE TableB.RNUM > 1*5 --1페이지당 보여줄 개수만 출력
+    ) TableA WHERE ROWNUM <= (0*5)+ 5 -- 0부터 선택한 페이지까지
+) TableB WHERE TableB.RNUM > 0*5 --1페이지당 보여줄 개수만 출력
 --페이징쿼리에서 필요한 변수는 2개
 --현재페이지수의 변수 page*queryPerPageNum == queryStartNo
 --1페이당보여줄 개수의변수 queryPerPageNum

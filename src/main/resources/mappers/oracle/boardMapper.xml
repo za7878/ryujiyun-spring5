@@ -3,7 +3,7 @@
 <mapper namespace="boardMapper">
 <!-- 첨부파일 CRUD 쿼리생성, 주, 우리로직에서는 첨부파일은 수정X->입력,삭제-->
 <!-- 첨부파일 삭제는 1개만 삭제하지 않고, 게시물별(bno) 일괄삭제도 있음. -->
-<delete id="deleteAttarchAll">
+<delete id="deleteAttachAll">
 delete from tbl_attach where bno = #{bno}
 </delete>
 <delete id="deleteAttarch">
@@ -50,7 +50,7 @@ update_date = systimestamp
 where bno = #{bno}
 </update>
 <!-- 아래 뷰카운터는 게시물 상세보기시 카운트 증가, 예) 유튜브 조회수 증가방식과 비슷 -->
-<update id="updateviewCount">
+<update id="updateViewCount">
 update tbl_board set
 view_count = nvl(view_count,0) + 1
 where bno = #{bno}
