@@ -26,6 +26,13 @@
 - 헤로쿠 클라우드에 배포할때, 매퍼폴더의 mysql폴더내의 쿼리에 now()를 date_add(now(3), interval 9 HOUR) 변경예정.(이유는 DB서버 타임존 미국이기 때문에)
 
 #### 20210623(수) 작업내용.
+- 시큐어코딩 방지메서드: <(O|o)bject...-> &lt;object(목적은 코딩태그를 특수 문자로 변경하는 메서드)
+- 실행되지 않는 코드가 생성됨.
+- 세션 사용법: 겟(Get)셋,(Set), 삭제(Remove)하는 방법
+- 세션 생성법: Session.setAttribute("세션변수명","값");//로그인시 세션변수 사용
+- 세션값 불러오기: session.getAttribute("세션변수명");
+- 세션 삭제하기: session.removeAttribute("세션변수명");//변수삭제
+- 전체세션삭제하기: session.invalidate();//전체 세션변수명으 삭제 = 세션초기화 = 로그아웃시 사용
 - 작업순서 : CRUD -> UC작업예정.
 - 업데이트 이후엔 파일업로드 구현 후 / download 컨트롤러 실습예정
 - update: updateBoard(서비스)참조 -> board_view(컨트롤러)직업+jsp작업

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.edu.service.IF_BoardService;
 import com.edu.service.IF_BoardTypeService;
@@ -48,6 +49,70 @@ public class AdminController {
 	@Inject
 	private CommonUtil commonUtil;
 	
+	//게시물 수정처리는 POST로만 접근가능
+	@RequestMapping(value="admin/board/board_update", method=RequestMethod.POST)
+	public String board_update(@RequestParam("file")MultipartFile[] files,BoardVO boardVO, PageVO pageVO) throws Exception {
+		//기존 등록된 첨부파일 목록 구하기 List(2차원배열)객체와 크기는 .size() 구함. 기존파일이 있을 때 사용.
+		List<AttachVO> delFiles = boardService.readAttach(boardVO.getBno());
+		//1차원 배열의 크기는 length
+		String[] save_file_names = new String[files.length];
+		String[] real_file_names = new String[files.length];
+		int idx = 0;
+		for(MultipartFile file:files) {//files[0]=file, files[1]
+			if(file.getOriginalFilename() != "") {//전송된 첨부파일이 있다면 실행
+				int sun = 0;//DB테이블에 저장된 순서
+				//아래 for목적: jsp폼에서 기존에 1번 위치에 기존 파일이 있으면, 기존파일을 지우고, 신규파일 덮어쓰는 로직.
+				for(AttachVO file_name:delFiles) {//기존파일을 가져와서 반복하면서 지우기 로직
+					if(idx == sun) {
+						File target = new File(commonUtil.getUploadPath(),file_name.getSave_file_name());
+						if(target.exists()) {
+						target.delete();//물리적인 파일 지우는 명령
+						}//if(target.exists())
+					}//if(idx == sun)
+						sun = sun + 1;
+				}//for(AttachVO file_name:delFiles)
+				//신규파일 업로드
+				save_file_names[idx] = commonUtil.fileUpload(file);//jsp폼에서 전송파일
+				real_file_names[idx] = file.getOriginalFilename();//UI용 이름 임시저장
+			}//if(file.getOriginalFilename() != "")
+		}//for(MultipartFile file:files)
+		String rawContent = boardVO.getContent();
+		String secContent = commonUtil.unScript(rawContent);
+		boardVO.setContent(secContent);
+		String rawTitle = boardVO.getTitle();
+		String secTitle = commonUtil.unScript(rawTitle);
+		boardVO.setTitle(secTitle);
+		boardService.updateBoard(boardVO);//게시물수정
+		//첨부파일 작업전, 시큐어코딩 : 입력/수정시 시큐어코딩 적용O, 뷰 화면에서 시큐어X
+		
+		String queryString = "bno="+boardVO.getBno()+"&page="+pageVO.getPage()+"&search_type="+pageVO.getSearch_type();
+		return "redirect:/admin/board/board_view?"+queryString;//수정한 이후에는 board_view페이지로
+		//이동:새로고침 방지하기 위해서 redirect사용
+	}
+	//게시물 수정폼은 URL쿼리스트링으로 접근
+	@RequestMapping (value="/admin/board/board_update_form", method=RequestMethod.GET)
+	public String board_update_form(Model model, @RequestParam("bno") Integer bno,@ModelAttribute("pageVO")PageVO pageVO) throws Exception{
+		//첨부파일용 save_file_names, real_file_names 2개 배열값을 구해서 boardVO입력이 필요
+		BoardVO boardVO = new BoardVO();
+		boardVO =  boardService.readBoard(bno);
+		//여기서 첨부파일 배열을 추가(아래)
+		
+		List<AttachVO> listAttachVO = boardService.readAttach(bno);
+		String[] save_file_names = new String[listAttachVO.size()];
+		String[] real_file_names = new String[listAttachVO.size()];
+		int idx=0;
+		//향상된 for문 사용
+		for(AttachVO file_name:listAttachVO) {//세로데이터를 가로데이터로 변경하는 로직
+			save_file_names[idx] = file_name.getSave_file_name();
+			real_file_names[idx] = file_name.getReal_file_name();
+			idx = idx + 1; //idx++
+		}
+		boardVO.setSave_file_names(save_file_names);
+		boardVO.setReal_file_names(real_file_names);
+		model.addAttribute("boardVO",boardVO); //1개 코드 저장
+		
+		return "admin/board/board_update";//.jsp생략
+	}
 	//게시물 삭제는 URL쿼리스트링으로 접근하지 않고, post방식으로 처리.
 	@RequestMapping(value="/admin/board/board_delete", method=RequestMethod.POST)
 	public String board_delete(@RequestParam("bno")Integer bno,PageVO pageVO) throws Exception {
@@ -65,7 +130,7 @@ public class AdminController {
 			target.delete();//물리적인 파일 지우는 명령
 			}
 		}
-		String queryString ="page="+pageVO.getPage()+"&search_type="+pageVO.getSearch_type()+"&search_keyword="+pageVO.getSearch_keyword();
+		String queryString ="page="+pageVO.getPage()+"&search_type="+pageVO.getSearch_type();
 		return "redirect:/admin/board/board_list?"+queryString;
 	}
 	//게시물 상세보기 폼으로 접근하지 않고 URL쿼리 스트링으로 접근(GET)
@@ -180,8 +245,7 @@ public class AdminController {
 		memberService.updateMember(memberVO);//반환값이 없음.
 		//redurect로 페이지를 이동하면, model로 담아서 보낼 수 없음. 쿼리스트링(URL?)으로 보냄.
 		String queryString = "user_id="+memberVO.getUser_id()+"&page="+pageVO.getPage()
-		+"&search_type="+pageVO.getSearch_type()
-		+"&search_keyword="+pageVO.getSearch_keyword();
+		+"&search_type="+pageVO.getSearch_type();
 		return "redirect:/admin/member/member_update_form?"+queryString;//
 	}
 	//아래 경로는 수정폼을 호출=화면에 출력만=렌더링만
