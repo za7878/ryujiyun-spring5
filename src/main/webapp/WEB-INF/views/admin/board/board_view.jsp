@@ -67,7 +67,7 @@
               	<c:forEach begin="0" end="1" var="idx">
               	<c:if test="${boardVO.save_file_names[idx] != null }">
               	 <div class="input-group">
-                  <div class="custom-file">
+                  <div class="">
                    <!-- 첨부파일을 URL로 직접접근 하지 못하기 때문에 컨트롤러로만 접근가능(다운로드전용 메서드생성)  -->
                    <a href="/download?save_file_name=${boardVO.save_file_names[idx]}&real_file_name=${boardVO.real_file_names[idx]}" >
                    ${boardVO.real_file_names[idx]}
@@ -83,7 +83,7 @@
                    <!-- containsIgnoreCase('찾을값의문장','비교기준값' -->
                    <c:choose>
                    		<c:when test="${fn:containsIgnoreCase(checkImgArray,extName)}">
-                   		<img src="/imge_preview?save_file_name=${boardVO.save_file_names[idx]}" style="width:100%;">
+                   		<img src="/image_preview?save_file_name=${boardVO.save_file_names[idx]}" style="width:100%;">
                    		</c:when>
                    		<c:otherwise>
                    		<!-- 아무 의미 없이 개발연습용으로  -->
@@ -104,8 +104,8 @@
               <button type="button" class="btn btn-default" id="btn_list">목록</button>
             </div>
             <input name="page" value="${pageVO.page}" type="hidden">
-           <%--  <input name="search_type" value="${pageVO.search_type}" type="hidden"> --%>
-            <input name="search_keword" value="${pageVO.search_keyword}" type="hidden">
+            <input name="search_type" value="${pageVO.search_type}" type="hidden">
+            <%-- <input name="search_keword" value="${pageVO.search_keyword}" type="hidden"> --%>
             <input name="bno" value="${boardVO.bno}" type="hidden">
           </form>
         </div>

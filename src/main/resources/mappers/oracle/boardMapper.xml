@@ -6,7 +6,7 @@
 <delete id="deleteAttachAll">
 delete from tbl_attach where bno = #{bno}
 </delete>
-<delete id="deleteAttarch">
+<delete id="deleteAttach">
 delete from tbl_attach where save_file_name = #{save_file_name}
 </delete>
 <!-- 왜 수정이 없는가-> 저장된 파일을 수정못하고, 기존삭제하고, 신규파일을 덮어씀 -->
