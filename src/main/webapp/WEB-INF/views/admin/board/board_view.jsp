@@ -1,10 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="../include/header.jsp" %>
+<style>
+/* 아래 미디어쿼리는 IE10, 11에서 지원하는 전용 CSS적용시 사용 */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+.ie_only {max-height:500px;overflow:scroll;}
+}
+</style>
 
- <!-- Content Wrapper. Contains page content -->
+
+  <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -16,7 +23,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">${boardVO.board_type}</li>
+              <li class="breadcrumb-item active">${boardVO.board_type} 게시물관리</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -34,7 +41,7 @@
           </div>
           <!-- /.card-header -->
           <!-- form start -->
-          <!-- 첨부파일을 전송할 때 enctype=필수 없으면, 첨부파일이 전송X -->
+          <!-- 첨부파일을 전송할때 enctype=필수 없으면, 첨부파일이 전송X -->
           <form name="form_view" method="get" action="/admin/board/board_update_form" enctype="multipart/form-data">
             <div class="card-body">
               <div class="form-group">
@@ -44,56 +51,64 @@
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">내용</label>
-               <br>
-               ${boardVO.content}
+                <br>
+                ${boardVO.content}
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">작성자</label>
-               <br>
-               ${boardVO.writer}
+                <br>
+                ${boardVO.writer}
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">조회수</label>
-               <br>
-               ${boardVO.view_count}
+                <br>
+                ${boardVO.view_count}
               </div>
               <div class="form-group">
                 <label for="exampleInputPassword1">작성일</label>
-               <br>
-              <fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${boardVO.reg_date}"/> 
+                <br>
+                <fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${boardVO.reg_date}"/> 
               </div>
               <div class="form-group">
                 <label for="exampleInputFile">첨부파일</label>
-              	<c:forEach begin="0" end="1" var="idx">
-              	<c:if test="${boardVO.save_file_names[idx] != null }">
-              	 <div class="input-group">
-                  <div class="">
-                   <!-- 첨부파일을 URL로 직접접근 하지 못하기 때문에 컨트롤러로만 접근가능(다운로드전용 메서드생성)  -->
-                   <a href="/download?save_file_name=${boardVO.save_file_names[idx]}&real_file_name=${boardVO.real_file_names[idx]}" >
-                   ${boardVO.real_file_names[idx]}
-                   </a>
-                   <!-- jstl에서 변수사용하기 fn.split('데이터','분할기준값') 목적: 확장자를 이용해서 이미지 미리보기를 할 건지 결정img태그 사용
-                   		String[] fileNameArray = String.split('변수값','분할기준값');
-                   		-->
-                   <c:set var="fileNameArray" value="${fn:split(boardVO.save_file_names[idx],'.')}" />
- 					<!-- 그림판.얼굴.jpg = 3개 배열, 그림판.jpg = 2개 배열-->                 
-                   <c:set var="extName" value="${fileNameArray[fn:length(fileNameArray)-1]}" />
-                   <!-- 그림판.얼굴.jpg 파일을 위 extNname = fineNameArray[2] = jpg -->
-                   <!-- 자바언어로는 switch ~ case문 ~default -->
-                   <!-- containsIgnoreCase('찾을값의문장','비교기준값' -->
-                   <c:choose>
-                   		<c:when test="${fn:containsIgnoreCase(checkImgArray,extName)}">
-                   		<img src="/image_preview?save_file_name=${boardVO.save_file_names[idx]}" style="width:100%;">
-                   		</c:when>
-                   		<c:otherwise>
-                   		<!-- 아무 의미 없이 개발연습용으로  -->
-                   		<c:out value="${checkImgArray}" /> 이미지가 아님.
-                   		</c:otherwise>
-                   </c:choose>
-                  </div>
-                </div>
-              	</c:if>
-              	</c:forEach>
+                <div class="input-group">
+                <c:forEach begin="0" end="1" var="idx">
+	                <c:if test="${boardVO.save_file_names[idx] != null}">
+	                
+	                  <div class="ie_only" style="">
+	                  	<!-- JSTL의 c:url 태그로 URL감싸주면 인코딩처리됩니다.(한글이 인코딩이됩니다) -->
+	                  	<c:url value="/download" var="url"> 
+						   <c:param name="save_file_name" value="${boardVO.save_file_names[idx]}" />
+						   <c:param name="real_file_name" value="${boardVO.real_file_names[idx]}" /> 
+						</c:url>
+						<a href="${url}">
+	                  	<!-- 첨부파일을 URL로 직접접근하지 못하기 때문에 컨트롤러로만 접근이 가능(다운로드전용 메서드생성)IE에서 한글쿼리스트링문제때문에 사용X -->
+	                    <%-- <a href="/download?save_file_name=${boardVO.save_file_names[idx]}&real_file_name=${boardVO.real_file_names[idx]}"> --%>
+	                    ${boardVO.real_file_names[idx]}
+	                    </a>
+	                    <!-- jstl에서 변수사용하기 fn.split('데이터','분할기준값') 목적: 확장자를 이용해서 이미지 미리보기를 할 건지 결정 img태그사용
+	                    	String[] fileNameArray = String.split('변수값','분할기준값');
+	                    -->
+	                    <c:set var="fileNameArray" value="${fn:split(boardVO.save_file_names[idx],'.')}" />
+	                    <!-- 그림판.얼굴.코.JPG = 3개배열, 그림판.jpg = 2개배열 -->
+	                    <c:set var="extName" value="${fileNameArray[fn:length(fileNameArray)-1]}" />
+	                    <!-- 그림판.얼굴.jpg 파일을 위 변수로 처리시 extName = fineNameArray[2] = jpg -->
+	                    <!-- 자바언어로는 switch ~ case문 ~ default -->
+	                    <!-- containsIgnoreCase('찾을값의문장','비교기준값') -->
+	                    <c:choose>
+	                    	<c:when test="${fn:containsIgnoreCase(checkImgArray,extName)}">
+	                    		<img src="/image_preview?save_file_name=${boardVO.save_file_names[idx]}" style="width:100%;">
+	                    	</c:when>
+	                    	<c:otherwise>
+	                    		<!-- 아무의미 없이 개발연습용으로  -->
+	                    		<c:out value="${checkImgArray}" /> 이미지가 아님.
+	                    	</c:otherwise>
+	                    </c:choose>
+	                  </div>
+	                
+	                </c:if>
+                </c:forEach> 
+                </div>              
               </div>
             </div>
             <!-- /.card-body -->
@@ -105,12 +120,12 @@
             </div>
             <input name="page" value="${pageVO.page}" type="hidden">
             <input name="search_type" value="${pageVO.search_type}" type="hidden">
-            <%-- <input name="search_keword" value="${pageVO.search_keyword}" type="hidden"> --%>
+            <%-- <input name="search_keyword" value="${pageVO.search_keyword}" type="hidden"> --%>
             <input name="bno" value="${boardVO.bno}" type="hidden">
           </form>
         </div>
-   
-        <!-- 댓글입력폼 -->
+        
+        <!-- 댓글 입력폼 -->
         <div class="col-md-12">
           <div class="card-default">
             <div class="card-header">
@@ -143,9 +158,9 @@
             <div class="card-footer">
               아래 댓글리스트 버튼을 클릭하시면 댓글 목록이 출력이 됩니다.
             </div>
-          </div>
-          </div>
-        <!-- //댓글입력폼 -->
+            </div>
+        </div>
+        <!-- //댓글 입력폼 -->
         <!-- 댓글 타임라인 -->
         <div class="col-md-12">
           <!-- The time line -->
@@ -153,12 +168,12 @@
           <!-- timeline time label -->
           <div class="time-label">
             <span class="bg-red" data-toggle="collapse" href="#collapseReply" role="button" id="btn_reply_list">
-                  댓글리스트
-                  [<span>1</span>]
-                </span>
+              댓글리스트
+              [<span>1</span>]
+            </span>
           </div>
-             <!-- 콜랩스 시작 -->
-             <div class="collapse timeline" id="collapseReply">
+          <!-- 콜랩스 시작 -->
+          <div class="collapse timeline" id="collapseReply">
           <!-- time-label 이후 after요소로 템플릿결과가 여기에 출력됨. -->
           <!-- /.timeline-label -->
           <!-- timeline item -->
@@ -181,41 +196,43 @@
           {{/each}}
           </script>
           
-          <!-- 페이징 처리 -->
-          <div class="row">
-            <ul class="pagination" style="margin: 0 auto;">
-              <!-- <li class="paginate_button page-item previous disabled" id="example2_previous">
-                <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-              </li>
-              <li class="paginate_button page-item active">
-                <a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a>
-              </li>
-              <li class="paginate_button page-item ">
-                <a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a>
-              </li>
-              <li class="paginate_button page-item ">
-                <a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a>
-              </li>
-              <li class="paginate_button page-item ">
-                <a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a>
-              </li>
-              <li class="paginate_button page-item ">
-                <a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a>
-              </li>
-              <li class="paginate_button page-item ">
-                <a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a>
-              </li>
-              <li class="paginate_button page-item next" id="example2_next">
-                <a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
-              </li> -->
-            </ul>
-          </div>
-          <!-- //페이징 처리 -->
-          </div>
+            <!-- 페이징 처리 -->
+            <div class="row">
+              <ul class="pagination" style="margin: 0 auto;">
+                <!-- <li class="paginate_button page-item previous disabled" id="example2_previous">
+                  <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                </li>
+                <li class="paginate_button page-item active">
+                  <a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a>
+                </li>
+                <li class="paginate_button page-item next" id="example2_next">
+                  <a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+                </li> -->
+              </ul>
+            </div>
+            <!-- //페이징 처리 -->
+            </div>
             <!-- //콜랩스 끝 -->
-             </div>
+          </div>
           <!-- END timeline item -->
+        </div>
         <!-- //댓글 타임라인 -->
+
         <!-- //콘텐츠 내용 -->
       </div><!-- /.container-fluid -->
     </section>
@@ -226,7 +243,7 @@
 <%@ include file="../include/footer.jsp" %>
 <script>
 $(document).ready(function(){
-	var form_view = $("form[name='form_view']");
+	var form_view = $("form[name='form_view']");//전역변수
 	$("#btn_list").click(function(){
 		//여기서는 함수내 변수
 		form_view.attr("action","/admin/board/board_list");

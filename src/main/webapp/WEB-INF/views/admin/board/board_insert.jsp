@@ -37,10 +37,10 @@
             <div class="card-body">
               <div class="form-group" style="display:none">
                 <label for="board_type">게시판타입</label>
-                <select readonly name="board_type" class="form-control">
-                <!-- 세션값을 비교값으로 사용하는 이유는 신규등록이기 때문에 기존게시물정보가 없음. -->
+                <select name="board_type" class="form-control">
+                <!-- 세션값을 비교값으로 사용하는 이유는 신규등록이기때문에 기존게시물정보가 없습니다. -->
                 <c:forEach var="boardTypeVO" items="${listBoardTypeVO}">
-                  <option ${session_board_type=boardTypeVO.board_type?'selected':''} value="${boardTypeVO.board_type}">${boardTypeVO.board_name}</option>
+                  <option ${session_board_type==boardTypeVO.board_type?'selected':''} value="${boardTypeVO.board_type}">${boardTypeVO.board_name}</option>
                 </c:forEach>
                   
                 </select>
@@ -66,7 +66,7 @@
                     <input name="file" type="file" class="custom-file-input" id="file_${idx}"><!-- id는 식별자0,1,2,3... -->
                     <label class="custom-file-label" for="file_${idx}">파일선택</label>
                   </div>
-                  <!-- 기존 업로드된 파일을 수정폼에 보여주기, 삭제버튼 필요(아래) -->
+                  
                 </div>
                 <div class="mb-2"></div>
                 
@@ -80,7 +80,7 @@
 
             <div class="card-footer text-right">
               <button type="submit" class="btn btn-primary">등록</button>
-              <a href="/admin/board/board_list?${pageVO.page}&search_type=${pageVO.search_type}" class="btn btn-info">목록</a>
+              <a href="/admin/board/board_list?page=${pageVO.page}&search_type=${pageVO.search_type}" class="btn btn-info">목록</a>
             </div>
             <input name="page" value="${pageVO.page}" type="hidden">
             <input name="search_type" value="${pageVO.search_type}" type="hidden">
@@ -94,6 +94,7 @@
   <!-- /.content-wrapper -->
 
 <%@ include file="../include/footer.jsp" %>
+
 <!-- 첨부파일명을 input태그디자인 안쪽에 집어넣는 확장프로그램 -->
 <script src="/resources/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <!-- 위 첨부파일 확장프로그램 실행(아래-개발자가 처리) -->
