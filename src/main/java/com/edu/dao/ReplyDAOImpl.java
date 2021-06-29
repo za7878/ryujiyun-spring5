@@ -45,7 +45,7 @@ public class ReplyDAOImpl implements IF_ReplyDAO{
 		Map<String,Object> paramMap = new HashMap<String,Object>();
 		paramMap.put("bno", bno);
 		paramMap.put("count", count);
-		sqlSession.update("replyMapper.replyCountUpdate", "paramMap");
+		sqlSession.update("replyMapper.replyCountUpdate", paramMap);
 	}
 
 	@Override
