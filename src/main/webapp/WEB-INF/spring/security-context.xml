@@ -19,13 +19,13 @@ Intercept라는 태그를 사용하는 것이 핵심
 	</security:session-management>
 	<!-- 여기서부터 intercept(가로채기AOP)사용해서 로그인 권한체크를 access 속성으로 설정 함.
 	특징은 밑에서부터 위로 해석이 됨.-->
-	<security:intercept-url pattern="/admin/**" access="hsaRole('ROLE_ADMIN')" />
-	<security:intercept-url pattern="/**/*_insert" access="hsaRole('ROLE_USER','ROLE_ADMIN')" />
-	<security:intercept-url pattern="/**/*_insert_form" access="hsaRole('ROLE_USER','ROLE_ADMIN')" />
-	<security:intercept-url pattern="/**/*_update" access="hsaRole('ROLE_USER','ROLE_ADMIN')" />
-	<security:intercept-url pattern="/**/*_update_form" access="hsaRole('ROLE_USER','ROLE_ADMIN')" />
-	<security:intercept-url pattern="/**/*_delete" access="hsaRole('ROLE_USER','ROLE_ADMIN')" />
-	<security:intercept-url pattern="/**/member/**" access="hsaRole('ROLE_USER','ROLE_ADMIN')" />
+	<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+	<security:intercept-url pattern="/**/*_insert" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+	<security:intercept-url pattern="/**/*_insert_form" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+	<security:intercept-url pattern="/**/*_update" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+	<security:intercept-url pattern="/**/*_update_form" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+	<security:intercept-url pattern="/**/*_delete" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
+	<security:intercept-url pattern="/**/member/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
 	<security:intercept-url pattern="/**" access="permitAll"/>
 	<security:csrf disabled="true"/>
 	<!-- 접근허용이 안된 사용자들을 체크해서 로그인 폼으로 이동하게 설정(아래)
@@ -50,6 +50,15 @@ Intercept라는 태그를 사용하는 것이 핵심
 delete-cookies="JSESSIONID,SPRING_SECURITY_REMEMBER_ME_COOKIE" />
 </security:http>
 <!-- 스프링시큐리티나 OAuth2.0 무엇이 되었든, Authenticatoin(인증), Authority(권한) -->
+<!-- /login이 호출되면 아래 쿼리를 실행되면서 최초로 데이터가 발생됨: 스프링시큐리티 클래스를 실행됨.
+user_id, user_pw
+user-by-username-query 이 쿼리가 실행됨(user_id사용) 이 쿼리만 가지고는 비교 안됨.
+위 쿼리결과인 password와 user_pw비교 해서 같으면 /login_success가 실행됨. 반대일 경우 다시 login폼
+암호데이터 비교 : password(해시값)-user_pw(admin1234)
+BCryptPasswordEncoder passwordEncoder =  new BCryptPasswordEncoder();
+스프링방식: Boolean valueTrue = passwordEncoder.matches("admin1234",password);//.equals비교불가
+일반사이트방식: sselect * from tnl_member where user_id=
+-->
 <security:authentication-manager>
 	<security:authentication-provider>
 	<security:jdbc-user-service
@@ -57,6 +66,9 @@ delete-cookies="JSESSIONID,SPRING_SECURITY_REMEMBER_ME_COOKIE" />
 	 users-by-username-query="select user_id as no,user_pw as password, enabled from tbl_member where user_id = ?"
 	 authorities-by-username-query="select user_id as no,levels as authority from tbl_member where user_id = ?"
 	 />
+	 <security:password-encoder ref="passwordEncoder" />
 	</security:authentication-provider>
+	
 </security:authentication-manager>
+<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 </beans>
