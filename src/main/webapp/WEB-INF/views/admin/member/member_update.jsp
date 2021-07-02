@@ -62,8 +62,8 @@
               <div class="form-group">
                 <label for="enabled">로그인여부</label>
                 <select name="enabled" id="enabled" class="form-control">
-                  <option value="1" ${memberVO.enabled==true?'selected':'' }">허용</option>
-                  <option value="0" ${memberVO.enabled==false?'selected':'' }">금지</option>
+                  <option value="1" ${memberVO.enabled==true?'selected':''}>허용</option>
+                  <option value="0" ${memberVO.enabled==false?'selected':''}>금지</option>
                 </select>
               </div>
               <div class="form-group">
