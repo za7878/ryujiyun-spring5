@@ -77,7 +77,7 @@ $(document).ready(function() {
 					<li class="clear">
 						<label for="password_lbl" class="tit_lbl pilsoo_item">암호</label>
 						<div class="app_content">
-							<input type="password" name="user_pw" class="w100p" id="password_lbl" placeholder="비밀번호를 입력해주세요"/>
+							<input type="password" name="user_pw" class="w100p" id="password_lbl" placeholder="비밀번호를 입력해주세요" />
 						</div>
 					</li>
 					<li class="clear">
@@ -130,19 +130,20 @@ $(document).ready(function() {
 <%@ include file="../include/footer.jsp" %>
 <script>
 $(document).ready(function(){
-	$('#btn_leave').click(function(){
+	$("#btn_leave").click(function(){
 		if(confirm('정말로 탈퇴하시겠습니까?')) {
-		//alert("삭제버튼 준비중 입니다.");
-		var form_leave = $("form[name='join_form']");
-		$("option:eq(0)","select[name='enabled']").val("false");//Set
-		//$("select[name='enabled']").html("<option value='false'>탈퇴</option>");//select Set
-		//alert($("select[name='enabled']").val());//Get
-		//위 값을 false, 0 둘 중 하나로 바꾼 후, submit 예정.
-		form_leave.attr("action","/member/mypage_leave");//크롬 오동작으로 추가한 코드
-		form_leave.submit();//삭제는 아니고, enabled 필드값을 수정함.
-		//탈퇴를 했자면, 로그아웃처리도 같이 되야 함.
-		//location.replace("/logout"); //크롬에서는 오동작해서 자바스크립트 처리는 안함.
+			//alert("삭제버튼 준비중 입니다.");
+			var form_leave = $("form[name='join_form']");
+			$("option:eq(0)","select[name='enabled']").val("false");//Set
+			//$("select[name='enabled']").html("<option value='false'>탈퇴</option>");//select Set
+			//alert($("select[name='enabled']").val());//Get
+			//위 값을 false, 0 둘중 1개 로 변경 후 submit예정.
+			form_leave.attr("action","/member/mypage_leave");//크롬오동작으로 추가한 코드
+			form_leave.submit();//삭제는 아니고, enabled 필드값을 수정합니다.
+			//탈퇴를 했다면, 로그아웃처리도 같이 되어야 함.
+			//location.replace("/logout");//크롬에서는 오동작해서 자바스크립트처리는 않함.
 		}
+		
 	});
 });
 </script>

@@ -6,8 +6,10 @@
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml
-					/WEB-INF/spring/security-context.xml</param-value>
+		<param-value>
+			/WEB-INF/spring/root-context.xml
+			/WEB-INF/spring/security-context.xml
+		</param-value>
 	</context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
@@ -30,9 +32,10 @@
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	<!-- 톰캣기반에서 페이지간 데이터 전송 시 영어기반으로 입출력이 되기 때문에 한글이 깨짐.
-	그래서, POST전용 전송값을 UTF-8로 전환시키는 필터클래스를 사용함.
-	웹프로그램 실행시 제일 먼저 실행되는 web.xml에 UTF-8유니코드 인코딩 필터를 설정을 함.  -->
+	<!-- 톰캣기반에서 페이지간 데이터전송시 영어기반으로 입출력이 되기때문에 한글은 깨집니다. 
+		그래서, POST전용 전송값을 UTF-8로 전환시키는 필터클래스를 사용합니다.
+		웹프로그램실행시 제일 먼저 실행되는 web.xml에 UTF-8유니코드 인코딩필터를 설정을 합니다.
+	-->
 	<filter>
 	  <filter-name>encoding</filter-name>
 	  <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -45,7 +48,7 @@
 	  <filter-name>encoding</filter-name>
 	  <url-pattern>/*</url-pattern>
 	</filter-mapping>
-	<!-- URL요청Endpoint에서 PATCH,Delete,Put 10년전에는 아예 없어서 구버전 호환성 추가 -->
+	<!-- URL요청Endpoint에서 PATCH,DELETE,PUT 10년전에는 아예없어서 구버전 호환성추가 -->
 	<filter>
 	    <filter-name>hiddenHttpMethodFilter</filter-name>
 	    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
@@ -54,18 +57,25 @@
 	    <filter-name>hiddenHttpMethodFilter</filter-name>
 	    <url-pattern>/</url-pattern>
 	</filter-mapping>
-	<!-- 스프링시큐리티가 적용된 URL을 필터링하는 클래스를 추가
-	필터체인은 security-context에서 등록된 intercept-url의 값을 검사하겠다는 의미 -->
+	<!-- 스프링시큐리티가 적용된 URL을 필터링하는 클래스를 추가 
+		필터체인은 security-context에서 등록된 intercept-url의 값을 검사하겠다는 의미
+	-->
+	
 	<filter>
-	<filter-name>springSecurityFilterChain</filter-name>
-	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-</filter>
-<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	<!-- 아무작업 없이 로그인 세션이 (로그인 포함) 풀리는 시간 지정하기 -->
+	<!-- 아무작업없이 모든 세션(로그인포함)이 풀리는 시간 지정하기 -->
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>
+	<!-- 톰캣서버에서 404파일에러 발생시 보여줄 @RequestMapping경로 지정(아래) -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/home/error/error_404</location>
+	</error-page>
 </web-app>
