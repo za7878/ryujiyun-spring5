@@ -7,12 +7,60 @@
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
-	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- properties를 불러오는 스프링빈을 만듬(아래) -->
+	<bean id="propertyConfigure" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+					
+				<!-- <value>classpath:/properties/oracle.properties</value> -->
+				
+				<value>classpath:/properties/cloude.properties</value>
+			
+			<!-- 	<value>classpath:/properties/hsql.properties</value> -->
+			
+			</list>
+		</property>
+	</bean>
 	<!-- 알리아스 Alias(별명) dataSource로 만듭니다.이유? 여러개의 DB와 호환되게 만들게됩니다. -->
 	<!-- 오라클, Mysql, Hsql 등 여러 DB서버와 호환되게 만드는데 필요(아래) -->
-	<alias name="dataSource-oracle_local" alias="dataSource"/>
-	<!-- 로컬(PC) Hsql용-헤로쿠클라우드에 배포용 드라이버 설정(나중에) -->
-
+	<alias name="dataSource-${DbType}" alias="dataSource"/>
+	<!-- embeded는 내장형(앱용)으로서 간단한 용도의 DB구조에 사용. file구조가 아닌 메모리 구조로 가능 -->
+	
+	<!-- /embeded/hsql_file.db를 자동으로 생성함(폴더포함) -->
+	<bean id="dataSource-hsql_local" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+		<property name="url" value="${DbUrl}" />
+		<property name="username" value="${DbUserName}" />
+		<property name="password" value="${DbPassword}" />
+	</bean>
+	
+	<!-- 위 생성 DB파일에 더미데이터 생성 시키는 문장스크립트(아래) 최초1회만 실행 -->
+	<!-- hsql이 아닌 다른 DB일 때는 주석처리 필수 -->
+	
+	<jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS"> 
+		<jdbc:script location="classpath:/db_script/hsql_file.sql" /> 
+	</jdbc:initialize-database>
+	
+	<!-- hsql데이터베이스 매니저 실행/embeded/hsql_file.db를 매니저에서 불러옴
+		  배포시는 항상 주석처리 함.
+	-->
+	
+	<!-- <bean depends-on="dataSource-hsql_local"
+	class="org.springframework.beans.factory.config.MethodInvokingBean">
+	<property name="targetClass" value="org.hsqldb.util.DatabaseManagerSwing" />
+	<property name="targetMethod" value="main" />
+	<property name="arguments">
+		<list>
+			<value>- -url</value>
+			<value>jdbc:hsqldb:file:c:/embeded/hsql_file.db;hsqldb.lock_file=false</value>
+			<value>- -user</value>
+			<value>sa</value>
+			<value>- -password</value>
+			<value></value>
+		</list>
+	</property>
+	</bean> -->
+	
 	<!-- 로컬(PC) 오라클 jdbc 드라이버 설정(아래) -->
 	<!-- 
 	<bean id="dataSource-oracle_local" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -30,17 +78,18 @@
 		<property name="driverClassName" 
 				  value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
 		<property name="url" 
-				  value="jdbc:log4jdbc:oracle:thin:@localhost:1521/XE"></property>
-		<property name="username" value="XE"></property>
-		<property name="password" value="apmsetup"></property>
+				  value="${DbUrl}"></property>
+		<property name="username" value="${DbUserName}"></property>
+		<property name="password" value="${DbPassword}"></property>
 	</bean>
 	
 	<!-- 위 오라클 jdbc빈을 스프링-마이바티스 에서 사용(아래) -->
+	<!-- 오라클용 쿼리와 hsql(mysql)용 쿼리가 틀리기 때문에 아래 쿼리 위치 수정 -->
 	<!-- SQL세션팩토리(공장)클래스를 빈으로 생성: 쿼리를 찍어낼수 있는 메서드가 있는 클래스 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">	   
 	 	<property name="dataSource" ref="dataSource" />
 	 	<!-- 매퍼 xml로만든 쿼리파일의 경로를 인식하게 함.(아래 classpath경로 src/main/resources/쿼리xml) -->
-	 	 <property name="mapperLocations" value="classpath:mappers/**/oracle/*Mapper.xml"></property>
+	 	 <property name="mapperLocations" value="classpath:mappers/**/${QueryType}/*Mapper.xml"></property>
 	</bean>
 	<!-- 위 SQL세션팩토리를 이용해서 템플릿클래스를 생성(insert(),select(),update(),
 	delete()등의 메서드를 사용할수 있는 클래스:세션이름인 이유는 쿼리 접속정보/해제정보를 관리하기 때문에 -->
@@ -60,7 +109,7 @@
 	</bean>
 	<!-- 파일업로드 설정 업로드 폴더위치 전역변수로 생성 bean을 실행시 초기값을 지정 contstructor사용 -->
 	<bean id="uploadPath" class="java.lang.String">
-		<constructor-arg value="c:\\upload" />
+		<constructor-arg value="${UploadPath}" />
 	</bean>
 	
 </beans>
