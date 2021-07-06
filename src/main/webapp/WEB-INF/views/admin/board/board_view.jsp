@@ -321,8 +321,12 @@ var replyList = function() {
 				printPagingList(result.pageVO,  ".pagination");
 			}
 		},
-		error:function() {
-			alert("RestAPI서버가 작동하지 않습니다. 다음에 이용해 주세요.");
+		error:function(result) {
+			//console.log(result);//크롬에서 확인할 때
+			//전체 json데이터를 출력할 때 stringify함수로 형변환해서 출력
+			//만약 json데이ㅓㅌ에서 키이름을 알게 되면, stringify함수 필요 없이 result.responseText 출력가능
+			alert(result.responsText);//이클립스에서 확인할 때
+			alert("RestAPI서버가 작동하지 않습니다. 다음에 이용해 주세요.0");
 		}
 	});
 };
@@ -353,7 +357,7 @@ $(document).ready(function(){
 				}
 			},
 			error:function() {
-				alert("RestAPI서버가 작동하지 않습니다. 다음에 시도해 주세요.")
+				alert("RestAPI서버가 작동하지 않습니다. 다음에 시도해 주세요.1")
 			}
 		});
 	});
@@ -389,7 +393,7 @@ $(document).ready(function(){
 				}
 			},
 			error:function() {
-				alert("RestAPI서버가 작동하지 않습니다. 잠시 후 이용해 주세요.")
+				alert("RestAPI서버가 작동하지 않습니다. 잠시 후 이용해 주세요.2")
 			}
 		});
 	});
@@ -436,7 +440,7 @@ $(document).ready(function(){
 				replyList();
 			},
 			error:function() {
-				alert("RestAPI서버가 작동하지 않습니다. 잠시 후 이용해 주세요.")
+				alert("RestAPI서버가 작동하지 않습니다. 잠시 후 이용해 주세요.3")
 			}
 		});
 	});
