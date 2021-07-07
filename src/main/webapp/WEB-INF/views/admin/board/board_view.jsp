@@ -73,10 +73,10 @@
                 <div class="input-group">
                 <c:forEach begin="0" end="1" var="idx">
 	                <c:if test="${boardVO.save_file_names[idx] != null}">
-	                
+	              	  	
 	                  <div class="ie_only" style="">
 	                  	<!-- JSTL의 c:url 태그로 URL감싸주면 인코딩처리됩니다.(한글이 인코딩이됩니다) -->
-	                  	<c:url value="/download" var="url"> 
+	                  	<c:url var="url" value="/download"> 
 						   <c:param name="save_file_name" value="${boardVO.save_file_names[idx]}" />
 						   <c:param name="real_file_name" value="${boardVO.real_file_names[idx]}" /> 
 						</c:url>
