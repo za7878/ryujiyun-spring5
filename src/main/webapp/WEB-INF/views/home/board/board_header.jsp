@@ -17,7 +17,7 @@
       bsCustomFileInput.init();
    });
 </script>
-// <!-- 서머노트 웹에디터 CSS 임포트 -->
+<!-- 서머노트 웹에디터 CSS 임포트 -->
 <link rel="stylesheet" href="/resources/admin/plugins/summernote/summernote-bs4.min.css">
 <link rel="stylesheet" href="/resources/admin/plugins/summernote/summernote.css">
 <!-- 서머노트 웹에디터 JS 임포트 -->
