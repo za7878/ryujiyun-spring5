@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.edu.dao.IF_BoardDAO;
 import com.edu.service.IF_BoardService;
 import com.edu.service.IF_MemberService;
 import com.edu.util.CommonUtil;
@@ -57,11 +58,79 @@ public class HomeController {
 	private IF_BoardService boardService;
 	@Inject
 	private CommonUtil commonUtil;
+	@Inject
+	private IF_BoardDAO boardDAO;
 	//MVC구조 기본서식
 	//@RequestMapping 요청 URL값
 	//public 뷰단jsp파일명 리턴형식 콜백함수(자동실행)
 	//return "파일명";
 	
+	//게시물 수정 처리 POST 추가
+	@RequestMapping(value="/home/board/board_update",method=RequestMethod.POST)
+	public String board_update(@RequestParam("file")MultipartFile[] files,BoardVO boardVO,PageVO pageVO, RedirectAttributes rdat) throws Exception {
+		//첨부파일 처리
+		List<AttachVO> delFiles = boardService.readAttach(boardVO.getBno());
+		//위 세로배치 데이터를 가로배치로 만들기 위해서 배열변수 생성
+		String[] real_file_names = new String[files.length];//전송된 files없다면 null이 들어감.
+		String[] save_file_names = new String[files.length];
+		int index = 0;
+		for(MultipartFile file:files) {
+			//배열 인덱스 위치에 따라서 삭제, 저장 처리
+			if(file.getOriginalFilename() != "") {
+				int sun = 0; //아래 for문을 위한 초기변수 생성
+				for(AttachVO delfile:delFiles) {
+					if(index==sun) {
+						File target = new File(commonUtil.getUploadPath(),delfile.getSave_file_name());//저장소에 저장됨 UUID파일명을 타겟으로 지정
+						if(target.exists()) {
+								target.delete();//실제 파일이 지워짐:신규파일을 덮어 쓰려고 지움.
+								boardDAO.deleteAttach(delfile.getSave_file_name());//save_file_name이 UUID로서 PK값임.
+							}
+						}
+						sun = sun + 1;//기존파일 삭제할 인덱스 1씩 증가
+					}//for(AttachVO delfile:delFiles) {
+					//신규파일 저장 처리, 물리적으로 저장소에 저장
+					String save_file_name = commonUtil.fileUpload(file);//저장소에 저장후 UUID파일명을 변환
+					save_file_names[index] = save_file_name;
+					real_file_names[index] = file.getOriginalFilename();//UI용 파일명			
+				} else {
+					save_file_names[index] = null;
+					real_file_names[index] = null;
+				}//if(file.getOriginalFilename() != "") {
+				index = index + 1; //신규파일 등록 인덱스 1씩 증가
+		}//for(MultipartFile file:files) {
+		boardVO.setSave_file_names(save_file_names);
+		boardVO.setReal_file_names(real_file_names);
+		//시큐어 코딩 처리
+		String rawTitle = boardVO.getTitle();
+		String rawContent = boardVO.getContent();
+		boardVO.setTitle(commonUtil.unScript(rawTitle));
+		boardVO.setContent(commonUtil.unScript(rawContent));
+		//게시판테이블 처리
+		boardService.updateBoard(boardVO);
+		rdat.addFlashAttribute("msg", "게시물 수정");//출력메세지:게시물 수정이(가) 성공 하였습니다
+		return "redirect:/home/board/board_view?bno="+boardVO.getBno()+"&page="+pageVO.getPage();//수정하고 뷰페이지로 이동
+	}
+	//게시물 수정 폼 호출 GET 추가
+	@RequestMapping(value="/home/board/board_update_form",method=RequestMethod.GET)
+	public String board_update_form(@RequestParam("bno")Integer bno, @ModelAttribute("pageVO")PageVO pageVO, Model model) throws Exception {
+		//1개의 레코드만 서비스로 호출 모델로 보내줌 첨부파일은 세로데이터를 가로데이터 변경 후 boardVO담아서 전송
+		BoardVO boardVO = new BoardVO();
+		boardVO = boardService.readBoard(bno);
+		//save_file_names, real_file_names 가상 필드값을 채움.
+		List<AttachVO> fileList = boardService.readAttach(bno);//세로데이터 생성
+		int index = 0;
+		String[] save_file_names = new String[fileList.size()];
+		String[] real_file_names = new String[fileList.size()];
+		for(AttachVO file:fileList) {//가로데이터로 변경하는 로직
+			save_file_names[index] = file.getSave_file_name();
+			real_file_names[index] = file.getReal_file_name();
+			index = index + 1;
+		}
+		boardVO.setReal_file_names(real_file_names);
+		boardVO.setSave_file_names(save_file_names);
+		model.addAttribute("boardVO",boardVO);
+		return "/home/board/board_update";//.jsp생략 반환값은 뷰로 보여줄 파일명
+	}
 	//게시물 삭제 처리 호출 POST 추가
 	@RequestMapping(value="/home/board/board_delete",method=RequestMethod.POST)
 	public String board_delete(@RequestParam("bno")Integer bno,RedirectAttributes rdat) throws Exception {
@@ -71,7 +140,11 @@ public class HomeController {
 		boardService.deleteBoard(bno);
 		//첨부파일 있으면 삭제
 		for(AttachVO file:delFiles) {//향상된 for문에서 실행조건 필요없이
-			File target = null; //내일 이어서 작업
+			//File 클래스는 객체를 생성할 때 생성자 메서드의 매개변수(경로,파일명)
+			File target = new File(commonUtil.getUploadPath(),file.getSave_file_name());
+			if(target.exists()) {//타겟폴더의 파일이 존재하면 삭제 구현(아래)
+				target.delete();//물리적인 UUID파일명의 파일 삭제처리.
+			}
 		}
 		rdat.addFlashAttribute("msg", "게시물 삭제");//성공시 메세지 출력용 변수
 		return "redirect:/home/board/board_list";//성공시 이동할 주소
