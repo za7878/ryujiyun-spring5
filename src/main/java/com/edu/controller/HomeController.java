@@ -68,13 +68,15 @@ public class HomeController {
 	//게시물 수정 처리 POST 추가
 	@RequestMapping(value="/home/board/board_update",method=RequestMethod.POST)
 	public String board_update(HttpServletRequest request, @RequestParam("file")MultipartFile[] files,BoardVO boardVO,PageVO pageVO, RedirectAttributes rdat) throws Exception {
+		/*1
 		//로그인한 세션ID와 게시물의 boardVO.writer사용자와 비교해서 같으면 계속, 틀리면 멈춤
 		HttpSession session = request.getSession();
 		if(!boardVO.getWriter().equals(session.getAttribute("session_userid"))) {
-			
 			rdat.addFlashAttribute("msgError", "게시물은 본인 글만 수정 가능합니다.");
-			return "redirect:/home/board/board_view?bno="+boardVO.getBno()+"&page="+pageVO.getPage();//본인 ID의 글이 아닐때 뷰페이지로 이동
+			//request객체에 이전 페이지 URL("Referer")로 존재하고, 이 URL이 이전페이지 이동으로 사용
+			return "redirect:"+request.getHeader("Referer"); //본인 ID의 글이 아닐때 뷰페이지로 이동
 		}//else로 묶을 필요가 없음. 왜? 위 return을 만나면, 이후 실행이 안되고 메서드가 종료됨.
+		*/
 		//첨부파일 처리
 		List<AttachVO> delFiles = boardService.readAttach(boardVO.getBno());
 		//위 세로배치 데이터를 가로배치로 만들기 위해서 배열변수 생성
@@ -124,14 +126,15 @@ public class HomeController {
 		//1개의 레코드만 서비스로 호출 모델로 보내줌 첨부파일은 세로데이터를 가로데이터 변경 후 boardVO담아서 전송
 		BoardVO boardVO = new BoardVO();
 		boardVO = boardService.readBoard(bno);
-		
+		/*2
 		//로그인한 세션ID와 게시물의 boardVO.writer사용자와 비교해서 같으면 계속, 틀리면 멈춤.
 		HttpSession session = request.getSession();
 		if(!boardVO.getWriter().equals(session.getAttribute("session_userid"))) {
 			
 			rdat.addFlashAttribute("msgError", "게시물은 본인 글만 수정 가능합니다.");
-			return "redirect:/home/board/board_view?bno="+boardVO.getBno()+"&page="+pageVO.getPage();//본인 ID의 글이 아닐때 뷰페이지로 이동
+			return "redirect:"+request.getHeader("Referer");//본인 ID의 글이 아닐때 뷰페이지로 이동
 		}
+		*/
 		//save_file_names, real_file_names 가상 필드값을 채움.
 		List<AttachVO> fileList = boardService.readAttach(bno);//세로데이터 생성
 		int index = 0;
@@ -150,14 +153,16 @@ public class HomeController {
 	//게시물 삭제 처리 호출 POST 추가
 	@RequestMapping(value="/home/board/board_delete",method=RequestMethod.POST)
 	public String board_delete(HttpServletRequest request, @RequestParam("bno")Integer bno,RedirectAttributes rdat, PageVO pageVO) throws Exception {
+	/*3
 	BoardVO boardVO = boardService.readBoard(bno);//아래 조건 때문에 추가	
 	//로그인한 세션ID와 게시물의 boardVO.writer사용자와 비교해서 같으면 계속, 틀리면 멈춤.
 	HttpSession session = request.getSession();
 	if(!boardVO.getWriter().equals(session.getAttribute("session_userid"))) {
 		
 		rdat.addFlashAttribute("msgError", "게시물은 본인 글만 삭제 가능합니다.");
-		return "redirect:/home/board/board_view?bno="+boardVO.getBno()+"&page="+pageVO.getPage();//본인 ID의 글이 아닐때 뷰페이지로 이동
+		return "redirect:"+request.getHeader("Referer");//본인 ID의 글이 아닐때 뷰페이지로 이동
 	}
+	*/
 		//부모테이블 삭제전 삭제할 파일들 변수로 임시저장(아래)
 		List<AttachVO> delFiles = boardService.readAttach(bno);//세로값
 		//테이블 1개 레코드 삭제처리

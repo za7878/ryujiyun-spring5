@@ -55,7 +55,7 @@ public class ReplyController {
 			replyService.updateReply(replyVO);
 			result = new ResponseEntity<String>("success",HttpStatus.OK);
 		} catch (Exception e) {
-			result = new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+			result = new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return result;//Restful방식은 항상 반환값이(Body부분)존재함.
 	}

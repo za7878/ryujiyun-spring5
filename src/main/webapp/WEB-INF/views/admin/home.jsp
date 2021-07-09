@@ -49,9 +49,10 @@
             <c:forEach var="memberVO" items="${latestMembers}">
              <li style="cursor: pointer;" onclick="location.replace('/admin/member/member_view?user_id=${memberVO.user_id}')">
                 <img src="/resources/admin/dist/img/default-150x150.png" alt="User Image">
-                <a class="users-list-name" href="#">관리자</a>
-                <span class="users-list-date">2021-05-28</span>
-              	<fmt:formatDate pattern="yyyy-MM-dd hh:MM:ss" value="${memberVO.reg_date}"/>
+                <a class="users-list-name" href="#">${memberVO.user_name}</a>
+                <span class="users-list-date">
+                <fmt:formatDate pattern="yyyy-MM-dd hh:MM:ss" value="${memberVO.reg_date}"/>
+                </span>
               </li>
             </c:forEach>
              

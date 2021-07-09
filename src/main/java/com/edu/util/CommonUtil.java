@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -49,14 +51,13 @@ public class CommonUtil {
 	@Inject
 	private IF_BoardDAO boardDAO;
 	
+	
 	//첨부파일 업로드/다운로드/삭제/인서트/수정에 모두 사용될 저장경로를 1개지정해서 [전역]으로사용
 	@Resource(name="uploadPath")
 	private String uploadPath;//root-context 업로드경로 클래스빈의 id값을 받아서 String변수 입력
 	public String getUploadPath() {
 		return uploadPath;
 	}
-	
-
 	//첨부파일 개별삭제 Ajax로 받아서 처리, @ResponseBody사용
 	@RequestMapping(value="/file_delete", method=RequestMethod.POST)
 	@ResponseBody
