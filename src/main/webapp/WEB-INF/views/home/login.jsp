@@ -34,7 +34,7 @@ if("${param.msg}" == "fail") {
                 <ul class="app_list">
                     <li class="clear">
                         <label for="id_lbl" class="tit_lbl pilsoo_item">아이디</label>
-                        <div class="app_content"><input autofocus type="text" name="user_id" class="w100p" id="id_lbl" placeholder="아이디를 입력해주세요" required/></div>
+                        <div class="app_content"><input autofocus type="text" name="user_id"" class="w100p" id="id_lbl" placeholder="아이디를 입력해주세요" required/></div>
                     </li>
                     <li class="clear">
                         <label for="password_lbl" class="tit_lbl pilsoo_item">암호</label>
@@ -44,7 +44,7 @@ if("${param.msg}" == "fail") {
                 </ul>
                 <p class="btn_line">
                 <button type="submit" class="btn_baseColor">로그인</button>
-                <button type="button" class="btn_baseColor" id="btn_naver_login" style="background:#19ce60; min-width:250px;">네아로 로그인</button>
+                <button type="button" class="btn_baseColor" id="btn_naver_login" style="background:#19ce60;min-width:250px;">네아로 로그인</button>
                 </p>	
             </fieldset>
         </form>
@@ -55,13 +55,13 @@ if("${param.msg}" == "fail") {
 <!-- //메인콘텐츠영역 -->
 
 <%@ include file="./include/footer.jsp" %>
- <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.2.js" charset="utf-8"></script>
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.2.js" charset="utf-8"></script>
 <script>
 $(document).ready(function(){
 	$("#btn_naver_login").click(function(){
 		//alert("준비중 입니다.");
-		location.replace("${url}");//login컨트롤러에서 model로 받은 $url변수값이 필요
-		//위url 자바 변수값은 네이버의 RestAPI주소 임.(네아로 인증 ID와 secret암호 URL에 포함됨.)
+		location.replace("${url}");//login컨트롤로에서 model로 받은 $url변수값이 필요
+		//위 url자바변수값은 네이버의 RestAPI주소 입니다.(네아로 인증 ID와 secret암호 URL에 포함됨.)
 	});
 });
 </script>
