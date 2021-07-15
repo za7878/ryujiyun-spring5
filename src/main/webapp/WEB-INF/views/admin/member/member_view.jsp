@@ -38,6 +38,9 @@
           <form id="form_view" name="form_view" action="/admin/member/member_update_form" method="get" enctype="multipart/form-data">
             <div class="card-body">
               <div class="form-group">
+              <img style="width:120px;height:120px;border-radius: 70%;" onerror="this.src='/resources/admin/dist/img/default-150x150.png'" src="/resources/profile/${memberVO.user_id}.png">
+              </div>
+              <div class="form-group">
                 <label for="exampleInputEmail1">사용자ID</label>
                 <br>
                 <c:out value="${memberVO.user_id}" /> 
@@ -83,7 +86,7 @@
               URL쿼리 스트링(GET)으로 보내면 X, POST방식으로 보냅니다. -->
               <input type="hidden" name="page" value="${pageVO.page}">
               <input type="hidden" name="search_type" value="${pageVO.search_type}">
-            <%--   <input type="hidden" name="search_keyword" value="${pageVO.search_keyword}"> --%>
+              <%-- <input type="hidden" name="search_keyword" value="${pageVO.search_keyword}"> --%>
               <input type="hidden" name="user_id" value="${memberVO.user_id}">
             </div>
           </form>

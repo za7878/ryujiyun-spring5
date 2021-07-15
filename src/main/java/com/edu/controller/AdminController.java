@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +29,11 @@ import com.edu.vo.MemberVO;
 import com.edu.vo.PageVO;
 
 /**
- * 이 클래스는 Admin관리자단을 접근하는 컨트롤러 클래스 <- 디스패처 서블렛(게이트웨이) 기능을 함.
- * 디스패처 서블렛 클래스는 톰캣이 실행될 때 제일 먼저 실행되는 클래스. 그래서, 게이트웨이 라고 함.
+ * 이 클래스는 Admin관리자단을 접근하는 컨트롤러 클래스 <- 디스패처 서블렛(게이트웨이) 기능을 합니다.
+ * 디스페처 서블렛 클래스는 톰캣이 실행(web.xml)될때 제일 먼저 실행되는 클래스, 그래서, 게이트웨이라고 합니다.
+ * 디스페처 서블릿 실행될때, 컨트롤러의 Request매핑경로를 재 등록합니다.
  * 변수 Object를 만들어서 jsp로 전송 <-> jsp 폼값을 받아서 Object로 처리
- * 디스패처 서블릿 실행될 때, 컨트롤러의 Request매퍼경로를 다 등록함.
- * @author 유지윤
+ * @author 김일국
  *
  */
 @Controller
@@ -55,12 +56,11 @@ public class AdminController {
 	//게시물 등록을 POST로 처리 합니다.
 	@RequestMapping(value="/admin/board/board_insert", method=RequestMethod.POST)
 	public String board_insert(@RequestParam("file")MultipartFile[] files,BoardVO boardVO) throws Exception {
-		//위 메서드의 BoardVO boardVO 파싱 =>내부 작동은 다음처러 됨 @RequestParam("title)/String tilte, @RequestParam("content") String content, @RequestParam("writer") String writer...
-		
-		
+		//위 메서드의 BoardVO boardVO 파싱=>내부작동은 다음처럼 됨 @RequestParam("title") String title, @RequestParam("content") String content, @RequestParam("writer") String writer ...
 		//신규 등록이라서 기존 첨부파일 불러오는 로직은 필요없음.
 		//AttachVO테이블에 가로데이터를 세로데이터로 입력하기 위해서...
-		
+		//save_file_names[] = ["uuid1.jpg","uuid2.jpg"]
+		//real_file_names[] = ["슬라이드1.jpg","슬라이드2.jpg"]
 		String[] save_file_names = new String[files.length];
 		String[] real_file_names = new String[files.length];
 		int index = 0;//첨부파일이 1개이상일때 반복변수로 사용
@@ -92,8 +92,6 @@ public class AdminController {
 		//기존 등록된 첨부파일 목록 구하기 List(2차원배열)객체의 크기는 .size() 구함. 기존파일이 있을때사용
 		List<AttachVO> delFiles = boardService.readAttach(boardVO.getBno());
 		//1차원 배열의 크기는 .length 
-		//save_file_names[] = ["uuid1.jpg","uuid2.jpg]
-		//real_file_names[] = ["슬라이드1.jpg","슬라이드2.jpg]
 		String[] save_file_names = new String[files.length];
 		String[] real_file_names = new String[files.length];
 		int index = 0;//jsp폼에서 보내온 파일에 대한 인덱스 초기값 변수.
@@ -277,7 +275,10 @@ public class AdminController {
 	}
 	//아래 경로는 회원신규등록을 처리하는 서비스를 호출하는 URL
 	@RequestMapping(value="/admin/member/member_insert", method=RequestMethod.POST)
-	public String insertMember(PageVO pageVO,MemberVO memberVO) throws Exception {
+	public String insertMember(HttpServletRequest request,MultipartFile file,PageVO pageVO,MemberVO memberVO) throws Exception {
+		if(!file.getOriginalFilename().isEmpty()) {
+			commonUtil.profile_upload(memberVO.getUser_id(),request,file);
+		}
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String rawPassword = memberVO.getUser_pw();//원시 패스워드값
 		String encPassword = passwordEncoder.encode(rawPassword);
@@ -287,7 +288,12 @@ public class AdminController {
 	}
 	//아래 경로는 수정처리를 호출=DB를 변경처리함.
 	@RequestMapping(value="/admin/member/member_update", method=RequestMethod.POST)
-	public String updateMember(MemberVO memberVO, PageVO pageVO) throws Exception {
+	public String updateMember(HttpServletRequest request, MultipartFile file,MemberVO memberVO, PageVO pageVO) throws Exception {
+		//프로필 이미지 처리 추가
+		if(!file.getOriginalFilename().isEmpty()) {//신규파일이 없으면 
+			String user_id = memberVO.getUser_id();
+			commonUtil.profile_upload(user_id, request, file);
+		}
 		//update 서비스만 처리하면 끝
 		//업데이트 쿼리서비스 호출하기 전 스프링시큐리티 암호화 적용합니다.
 		String rawPassword = memberVO.getUser_pw();
@@ -296,7 +302,7 @@ public class AdminController {
 			String encPassword = passwordEncoder.encode(rawPassword);
 			memberVO.setUser_pw(encPassword);
 			//스프링시큐리티 내장클래스에서 user_pw(admin1234)와 password(해시값)비교함수
-			//passwordEncoder.matches("admin1234",password);
+			//passwordEncoder.matches("admin1234", password);
 		}
 		memberService.updateMember(memberVO);//반환값이 없습니다.
 		//redirect로 페이지를 이동하면, model로 담아서 보낼수 없습니다. 쿼리스트링(URL?)으로 보냅니다.
@@ -314,7 +320,7 @@ public class AdminController {
 		return "admin/member/member_update";//상대경로
 	}
 	@RequestMapping(value="/admin/member/member_delete", method=RequestMethod.POST)
-	public String deleteMember(MemberVO memberVO) throws Exception {
+	public String deleteMember(HttpServletRequest request,MemberVO memberVO) throws Exception {
 		logger.info("디버그: " + memberVO.toString());
 		//MemberVO memberVO는 클래스형 변수: String user_id 스트링형 변수 같은 방식.
 		String user_id = memberVO.getUser_id();
@@ -323,6 +329,8 @@ public class AdminController {
 		//return "admin/member/member_list";//삭제후 이동할 jsp경로지정
 		//위 방식대로하면, 새로고침하면, /admin/member/member_delete 계속 실행됩니다.-사용자단에서 실습
 		//게시판테러상황을 방지하기 위해서, 쿼리를 작업 후 이동할때는 redirect(다시접속)라는 명령을 사용합니다.
+		//DB테이블 삭제 후 회원프로필 이미지가 exist()==true면 삭제하는 로직 추가.
+		commonUtil.profile_delete(user_id,request);
 		return "redirect:/admin/member/member_list";//단,redirect는 절대경로를 사용.
 	}
 	@RequestMapping(value="/admin/member/member_view", method=RequestMethod.GET)
@@ -362,9 +370,9 @@ public class AdminController {
 		//컨트롤러에서 jsp로 자료를 Model에 담아서 보내게 됩니다.
 		model.addAttribute("listMember", listMember);
 		//model.addAttribute("pageVO", pageVO);//나중에 @ModelAttribute로 대체
-		return "admin/member/member_list";//jsp파일 상대경로 표시. 개발자 A작업
+		return "admin/member/member_list";//jsp파일 상대경로
 	}
-	//URL요청 경로는 @RequestMapping 반드시 절대경로로 표시
+	//URL요청 경로는 @RequestMapping 반드시 절대경로로 표시. 개발자A 작업
 	@RequestMapping(value="/admin", method=RequestMethod.GET)
 	public String admin(Model model) throws Exception {//에러발생시 Exception클래스의 정보를 스프링으로 보내게 됩니다.		
 		//아래 상대경로에서 /WEB-INF/views/폴더가 루트(생략prefix접두어) 입니다.
@@ -376,10 +384,10 @@ public class AdminController {
 		model.addAttribute("latestMembers", latestMembers);
 		return "admin/home";//리턴 경로=접근경로는 반드시 상대경로로 표시
 	}
-	//메인페이지 또는 대시보드에 최신 테이블 리스트를 출력하는 방법 2가지(위, model사용)
-	//아래, <c:import 방식 : 최신 게시물 용도로 사용// 페이지 안에서 컴파일된 다른 페이지를 불러올 수 있음. 개발자B작업
+	//메인페이지 또는 대시보드에 최신 테이블리스트를 출력하는 방법 2가지(위,model사용
+	//아래, <c:import방식 : 최신 게시물용도로 사용 //페이지안에서 컴파일된 다른 페이지를 불러올 수 있음. 개발자B 작업
 	@RequestMapping(value="/admin/latest/latest_board",method=RequestMethod.GET)
-	public String latest_board(@RequestParam(value="board_name",required=false) String board_name, @RequestParam(value="board_type",required=false) String board_type, Model model) throws Exception {
+	public String latest_board(@RequestParam(value="board_name",required=false) String board_name, @RequestParam(value="board_type",required=false) String board_type,Model model) throws Exception {
 		PageVO pageVO = new PageVO();
 		pageVO.setPage(1);
 		pageVO.setQueryPerPageNum(5);
@@ -388,6 +396,6 @@ public class AdminController {
 		model.addAttribute("board_name", board_name);
 		model.addAttribute("board_type", board_type);
 		model.addAttribute("latestBoard", latestBoard);
-		return "admin/latest/latest_board";//.jsp생략, 최신 게시물을 출력하는 결과 페이지 생성
+		return "admin/latest/latest_board";//.jsp생략, 최신게물을 출력하는 결과페이지 생성
 	}
 }

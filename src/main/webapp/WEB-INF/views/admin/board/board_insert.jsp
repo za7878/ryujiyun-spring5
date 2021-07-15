@@ -69,10 +69,7 @@
                   
                 </div>
                 <div class="mb-2"></div>
-                
                 </c:forEach>
-                
-
               </div>
               
             </div>
