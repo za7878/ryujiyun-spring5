@@ -74,7 +74,6 @@
         	<c:import url="/admin/latest/latest_board?board_type=${boardTypeVO.board_type}&board_name=${boardTypeVO.board_name}" />
         </c:forEach>
         
-       <c:import url="/admin/latest/latest_board" />
         </div>
         <!-- //최근게시물리스트 -->
       </div><!-- /.container-fluid -->
