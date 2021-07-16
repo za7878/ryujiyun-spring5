@@ -270,7 +270,8 @@ public class HomeController {
 	@RequestMapping(value="/join_form",method=RequestMethod.GET)
 	public String join_form() throws Exception {
 		
-		return "home/join";//.jsp생략
+		//return "home/join";//타일즈 적용 전
+		return "join.tiles";//tiles폴더 안에 join.jsp 뷰호출.
 	}
 	//마이페이지에서 회원탈퇴 POST방식 처리만.
 	@RequestMapping(value="/member/mypage_leave", method=RequestMethod.POST)
@@ -337,7 +338,8 @@ public class HomeController {
 		pageVO.setQueryPerPageNum(5);//공지사항5개, 보드타입 필요(세션으로 처리 안됨.)
 		pageVO.setBoard_type("notice");
 		model.addAttribute("latestNotice",boardService.selectBoard(pageVO));//공지사항 최근게시물
-		return "home/index";//확장자가 생략 .jsp가 생략되어 있음.
+		//return "home/index";//타일즈 적용전
+		return "index.tiles";//타일즈 적용 후. tiles폴더 안에 index.jsp 실행
 	}
 	
 }
