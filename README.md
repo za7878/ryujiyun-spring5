@@ -26,6 +26,9 @@
 - ======== 2주간 작업내역 끝(07.16금) ===================
 - 헤로쿠 클라우드에 배포할때, 매퍼폴더의 mysql폴더내의 쿼리에 now()를 date_add(now(3), interval 9 HOUR) 변경예정.(이유는 DB서버 타임존 미국이기 때문에)
 
+#### 20210719(월) 작업내용.
+- 알고리즘 다이어그램 기반으로 자바코딩 테스트 예정. (깃 it강의 저장소 자료 이용)
+
 #### 20210716(금) 작업내용
 - 수업전 헤로쿠에 배포 후 어제 작업한 결과 확인
 - jsp템플릿인 tiles(타일즈) 사용
@@ -35,6 +38,45 @@
 - 1. pom.xml 타일즈 모듈 라이브러리 추가
 - 2. 추가 tiles-context.xml 타일즈 설정파일 추가
 - 3. 기존 home/include 폴더의 header.jsp와 footer.jsp파일 복사해서 그대로 사용.
+
+```
+import java.io.BufferedReader;//키보드 입력 때문에 필요
+import java.io.InputStreamReader;//키보드 입력 때문에 필요
+import java.util.Arrays;// 오름차순 정렬 떄문에 필요
+class Main {
+	public static void main(String[] args) throws Exception {
+	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N;
+		int[] questions;
+		N = Integer.parseInt(br.readLine());//키보드로 입력받는 커서가 나옴
+		//System.out.println("키보드로 입력한 값은" + N);
+		questions = new int[N];//키보드로 입력한 값 N으로 난이도 배열의 크기를 지정함.
+		String str = br.readLine();//키보드 입력	받는 커서가 나옴. 단, 숫자 사이에 공백을 집어 넣음.
+		//문자열로 입력 받은 문자를 questions 정수형 배열 변수에 하나씩 입력함.
+		String[] strArray = str.split(" ");
+		for(int i=0;i<N;i++) {
+			questions[i] = Integer.parseInt(strArray[i]);
+		}
+	//System.out.println("난이도 입력값" + Arrays.toString(questions));
+		Arrays.sort(questions);//입력 받은 questions배열을 오름차순 정렬
+		int count = 0;
+		int before = questions[0];
+		//int current = 0;
+		for(int current:questions) {
+			if(before != current) {
+				count = count + 1;
+			}
+			if(count == 2) {break;}
+			before = current;
+		}
+		if(count >= 2) {
+			System.out.println("Yes");
+		}else{
+			System.out.println("No");
+		}
+	}
+}
+```
 
 #### 20210714(수) 작업내용
 - 네아로 로그인 부분 마무리 : 외부 API이고, 네이버 개발자들이 만든 것.
