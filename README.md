@@ -10,55 +10,316 @@
 - 관리자단 게시물관리 CRUD 처리(4.파일업로드구현,5.트랜잭션구현).
 - 관리자단 댓글 CRUD 처리(6.RestAPI기능구현-개발트렌드).
 - 관리자단 왼쪽메뉴 UI 메뉴 고정시키기(7.jQuery로 구현).-관리자단 마무리.
-- ---------------------
 - 사용자단 로그인 화면 JSP로 만들기.
 - 로그인처리 및 관리자 권한체크 기능 추가(8.스프링시큐리티구현).
-- ======== 3주간 작업내역 끝(07.02금) ===================
-- ======== 2주간 작업내역 시작 (사용자단은 관리자단 로직을 사용합니다.)========
 - 사용자단 회원가입, 수정, 탈퇴 JSP기능 추가.
+- 헤로쿠 클라우드 준비작업.
+- 관리자단 대시보드작업.
 - 사용자단 게시판 CRUD 처리.
-- 사용자단 댓글 CRUD 처리.
 - 헤로쿠 클라우드에 배포(9.클라우드 배포CI/CD구현-개발트렌드).깃(최신소스)-연동-헤로쿠(배포)
-- 문서작업(제출용)
-- [실습시간이 가능하다면: 
-- [실습시간이 가능하다면: 알고리즘 다이어그램기반으로 자바코딩테스트]
-
-- ======== 2주간 작업내역 끝(07.16금) ===================
+- 사용자단 댓글 CRUD 처리.
+- 문서작업(제출용)OK.
+- 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리OK.
+- 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현)OK.
 - 헤로쿠 클라우드에 배포할때, 매퍼폴더의 mysql폴더내의 쿼리에 now()를 date_add(now(3), interval 9 HOUR) 변경예정.(이유는 DB서버 타임존 미국이기 때문에)
+- 알고리즘 다이어그램기반으로 자바 코딩테스트 작업시작
+#### 작업일정.
+- 7월9일(금) 모두 줌으로 수업
+- 7월12(월) 학원이사로 휴강
+- 7월13(화) 이사한 학원에서 수업시작(A조대면,B조줌)
+- 7월20(화) 강사 김일국 수업 종료.
 
-#### 20210719(월) 작업내용.
-- 알고리즘 다이어그램 기반으로 자바코딩 테스트 예정. (깃 it강의 저장소 자료 이용)
+#### 앞으로 남은 1주일간 작업예정내용 정리.
+- 사용자단 메인페이지(대시보드) 작업예정.
+- 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현).
+- 문서작업(제출용)예정.
+- 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리예정.(기술참조 https://github.com/miniplugin/kimilguk )
+- jsp템플릿인 tiles(타일즈), siteMesh(사이트메쉬), velocity(벨로시티) 등이 있습니다.
+- 현업에서는 위 3가지 템플릿중 1가지는 항상 사용하기 때문에 대표적으로 타일즈를 실습할 예정입니다.
+- 위 3가지 구조는 비슷하기 때문에 1가지만 아셔도 다른 jsp템플릿 적용시 응용가능합니다.
+- 알고리즘 다이어그램기반으로 자바코딩테스트예정(깃 it강의저장소자료이용).
+- 코딩테스트 3가지: 1. dev구름처럼 온라인 코딩테스트.(디버그)
+- 2. 회사에서 PC제공해서 PC의 이클립스에서 코딩테스트.(디버그)
+- 3. 회사에서 종이에 코딩테스트: 수두코딩(Pseudo-code)로 로직만 검사하는 테스트.(디버그X)
+- 문제를 분석 -> 다이어그램만들기 -> 자바코딩 테스트
+- 10개 다이어그램 -> 자바코딩 테스트
+#### 데이터의 이동
+- VO클래스의 이동: 매퍼쿼리<->DAO(M)<->Service<->Controller(C)<->jsp(V)
 
-#### 20210716(금) 작업내용
-- 수업전 헤로쿠에 배포 후 어제 작업한 결과 확인
-- jsp템플릿인 tiles(타일즈) 사용
-- 알고리즘 다이어그램 기반으로 자바코딩 테스트 예정(깃 it강의 저장소 자료이용)
-- 타일즈역할: jsp템플릿이라고 하고, jsp구조(레이아웃)를 체계적으로 관리하는 모듈
-- include(header.jsp,footer.jsp)를 대체 함.
-- 1. pom.xml 타일즈 모듈 라이브러리 추가
-- 2. 추가 tiles-context.xml 타일즈 설정파일 추가
-- 3. 기존 home/include 폴더의 header.jsp와 footer.jsp파일 복사해서 그대로 사용.
+#### 변수값(데이터) ReplyVO데이터클래스를 기준으로
+- JSON데이터: 크롬에서 부메랑으로 List<ReaplyVO>형태의 데이터확인
+- JSON데이터구조: ArrayList(표) + HashMap(Key:Value)
 
 ```
-import java.io.BufferedReader;//키보드 입력 때문에 필요
-import java.io.InputStreamReader;//키보드 입력 때문에 필요
-import java.util.Arrays;// 오름차순 정렬 떄문에 필요
+{
+    "rno": 4,
+    "reply_text": "부메랑댓글 입력테스트",
+    "replyer": "admin",
+    "reg_date": 1626310996371,
+    "update_date": 1626310996371,
+    "bno": 2
+},
+{
+    "rno": 3,
+    "reply_text": "부메랑댓글 입력테스트",
+    "replyer": "admin",
+    "reg_date": 1626310964420,
+    "update_date": 1626310964420,
+    "bno": 2
+}
+```
+- ArrayList데이터형:List<ReplyVO> replyList = new ArrayList<ReplyVO>();//DB쿼리결과
+- 위 ArrayList구조: List(인터페이스) > ArrayList(임플리먼트클래스-데이터클래스)
+- HashMap데이터형:Map<String,Object> mapData = new HashMap<String,Object>();
+- 위 HashMap구조: Map(인터페이스-메서드명) > HashMap(구현클래스)
+- Hash해시태그: 그물망(해시)=#=좌표(x,y)=(Key:Value)
+
+#### 20210720(화) 작업예정.
+- 코딩 테스트 10번 마무리.
+- 코딩 테스트 9번부터 시작,
+- 코딩 테스트 8,7,6까지 마무리.
+- 8교시에 UI구현 워드 문서 과제물 제출. 7교시에 확인예정.
+
+#### 20210719(월) 작업예정.
+- 로또 번호가 올바른 번호인지 확인하는 코드 작성. 코딩테스트 10번 소스(아래)
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main{
+	public boolean isValid(int[] Lotto, int n) {
+		//조건 1, 2, 3 구현하는 코딩 입력(아래)
+		if(n != 6) {
+			return false;//현재 isValid메서드가 종료되면서, false를 반환 함.
+		}
+		//조건1. 중복숫자 검사로직
+		for(int i=0;i<(n-1);i++) {
+			if (Lotto[i] == Lotto[i+1]) {
+				return false;//중복숫자가 있으면, 현재 isValid메서드를 종료 하고, false를 변환함.
+			}
+		}
+		//조건2, 숫자범위는 1부터 45까지의 숫자만 인정이 됨.
+		
+		//조건3. 현재 로또 번호가 오름차순 정렬로 되었는지 확인하는 로직.
+		
+		return true;
+	}
+	public static void main(String[] args) {
+		int n;//6개의 로또번호 입력 받을 크기
+		int[] Lotto;//배열의 크기가 필요
+		boolean Real;//진짜 로또번호인지 확인 결과 참/거짓
+		Scanner sc = new Scanner(System.in);
+		n = sc.nextInt();
+		Lotto = new int[n];
+		for(int i=0;i<n;i++) {
+			Lotto[i] = sc.nextInt();
+		}
+		System.out.println("주운 로또 번호는 "+ Arrays.toString(Lotto));
+		Real = isValid(Lotto, n);
+		if(Real == true) {
+			System.out.println("주운 로또 번호는 진짜 입니다.");
+		}else{
+			System.out.println("주운 로또 번호는 가짜 입니다.");
+		}
+	}
+	
+}
+```
+
+- 10진수를 2진수로 변환 코딩테스트05 소스(아래)
+- 13 = 1101(2)
+- 13 = 10의 자리1, 1의 자리 3
+- 1101 = 8821(자리수)코드 = 2(3)자리수1, 2(2)자리는1, 2(1)자리는 0, 2(0)자리는 1
+- 모든 수의 0승(제곱) = 1
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+	public static void main(String[] args) {
+		int[] Bin = new int[10];//배열 크기가 10인 정수형 배열변수 생성.
+		int Dec;//키보드로 입력받을 십진수 저장공간
+		int idx = 0;//반복문에 사용할 변수선언
+		int Mok, Nmg;//몫과 나머지로 변수 사용
+		Scanner sc = new Scanner(System.in);
+		Dec = sc.nextInt();
+		while(true) {
+			Mok = (int) Dec/2;
+			Nmg = Dec - (Mok*2);//나머지를 구하는 공식
+			Bin[idx] = Nmg;
+			idx = idx +1; //idx++
+			if(Mok==0) {
+				break;
+			}else{
+				Dec = Mok;
+			}
+		}//반복문 끝
+		//역순 출력에 대한 로직 1101 -> 1011 역순으로 출력
+		for(int i=idx-1;i>=0;i--) {
+			System.out.print(Bin[i] + " ");
+		}
+	}
+}
+
+```
+
+- 삽입정렬 코딩테스트04(아래)오름차순에서
+- 특징 : 
+- 버블정렬 코딩테스트 03(아래)오름차순에서
+- 특징1 : 선택정렬과는 반대로 제일 큰 값이 오른쪽에 배치 되면서 1회전이 종료
+- 참고) 선택 정렬은 제일 작은 값이 왼쪽에 배치 되면서 1회전이 종료
+- 특징2 : 비교할 때 선택정렬은 비교할 기준자리가 있으나, 버블정렬은 바로 옆의 값을 비교하는 방식(거품방식)
+
+```
+import java.util.Scanner;
+import java.util.Arrays;
+class Main {
+	public static void main(String[] args) {
+		int n;
+		int[] Numbers;
+		int bubble, idx, Temp;
+		Scanner sc = new Scanner(System.in);//키보드로 입력 스캐너 객체 생성.
+		n = sc.nextInt();
+		Numbers = new int[n];//배열의 크기 지정
+		for(int i=0;i<n;i++) {
+			Numbers[i] = sc.nextInt();
+		}
+		System.out.println("입력된 배열값 확인" + Arrays.toString(Numbers));
+		for(bubble=0;bubble<n;bubble++) {
+			for(idx=0;idx<n-1;idx++) {
+				if(Numbers(idx) > Numbers(idx+1)) {
+					Temp = Numbers[idx];
+					Numbers[idx] = Numbers[idx+1];
+					Numbers[idx+1] = Temp;
+				}
+				if(bubble == 0){
+					System.out.println(bubble + " 번째 내부 for문" + idx + "번째");
+				}+
+			}
+		}
+		for(int i=0;i<5;i++) {
+			System.out.println(Numbers[i] + " ");
+		}
+	}
+}
+```
+
+- Temp변수 정렬 코딩 테스트02 소스(아래) 지난주에 사용한 Arrays클래스 sort메서드 구성 연습
+- 예, 중복 for문에서 외부 1회전 (내부 for문 1회전 ~ 4회전)
+- 5, 4, 3, 2, 1 (원시 데이터)
+- 4, 5, 3, 2, 1 (내부 for 1회전)
+- 3, 5, 3, 2, 1 (내부 for 2회전)
+- 2, 5, 4, 3, 1 (내부 for 3회전)
+- 1, 5, 4, 3, 2 (내부 for 4회전)
+- 외부 2회전 (내부 for문 2회전 ~ 4회전)
+- 1, 5, 4, 3, 2(원시 데이터)
+- 1, 4, 5, 3, 2(내부 for 1회전-2번째)
+- 1, 3, 5, 4, 2(내부 for 2회전-3번째)
+- 1, 2, 5, 4, 3(내부 for 3회전-4번째)
+
+```
+
+```
+
+- 스위치 변수 사용 코딩 테스트01소스(아래).
+
+```
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 class Main {
 	public static void main(String[] args) throws Exception {
-	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));//문자열을 입력하는 커서가 발생.
+		int UNIT = 50000;//화폐의 최고 단위 금액. 초기화폐단위 초기화.
+		int NUM = 0; //(입력금액/단위 금액) = 단위금액의 화폐 매수 변수 초기화.
+		int SW = 0;//스위치(On/Off) 변수 = 플래그(깃발)변수
+		int MONEY = Integer.parseInt(br.readLine());
+		while(true) { //IoT쪽에서는 while(true)문으로 외부데이터를 읽어 들임.
+		
+			if(UNIT>=1) {
+				NUM = (int)MONEY/UNIT;//화폐매수는 0.5매수는 없기 때문에 정수로 형변환 함.
+				System.out.println(UNIT+" 원의 화폐매수는 " + NUM);
+				//다음 반복을 위해서 MONEY변수 값 조정, UNIT변수값 조정.
+				MONEY = MONEY-(UNIT*NUM);//277777 - 250000 = 25000 (1회전 결과)
+				
+				if(SW==0) {
+					UNIT = UNIT/5;//5만원->1만원으로 단위변경(1회전 결과, 3회전, 5회전...)
+					SW = 1;//1회전 후 SW스위치 변수값을 1로 변경.
+				}else{
+					UNIT = UNIT/2;//1만원->5천원으로 단위변경(2회전 결과, 4회전, 6회전...)
+					SW = 0;//1회전 후 SW스위치 변수값을 0으로 변경.
+				}
+			
+			}else{
+				break;//while반복문을 Stop. 무한반복을 벗어나는 코드.
+			}
+			
+		}
+		
+	}
+}
+```
+
+- 빅O 시간 복잡도 구하기 : for문 1개면, Big O(N)번 횟수,
+- 중복 for문이면, Big O(N^2)번 횟수.
+- for(i=1; i=3; i++) {for(ii=1; ii=3; ii++) {구현로직} }
+- 위 죽복 for문은 시간복잡도가 O(N^2)번 횟수
+- 프로그램의 성능을 측정하는 단위 빅O 표기 사용 함.
+- 화폐 매수 구하기: 277,777원 입금 금액이 있다면,
+- 5만원 짜리 지폐는 몇 장인지, = 5장
+- 1만원 짜리 지폐는 몇 장인지, = 2장
+- 5천원 짜리 지폐는 몇 장인지, = 1장
+- 1천원 짜리 지폐는 몇 장인지, = 2장
+- 500원 짜리 동전은 몇 개 인지, = 1개
+- 100원 짜리 동전은 몇 개 인지, = 2개
+- 50원 짜리 동전은 몇 개 인지, = 1개
+- 10원, 5원, 1원은 몇 개 인지. = 2개, 1개, 2개
+- 화폐단위가 5만원 부터 시작해서 입력금액/UNIT 1회 반복할때 마다 UNIT 변경
+- 화폐단위(UNIT)변수가 바뀌는 순서 로직(아래)
+- SW=0 : UNIT/5 = 5만, 5천원, 500원, 50원, 5원= UNIT/5
+- SW=1 : UNIT/2 = 1만, 1천원, 100원 , 10원, 1원 = UNIT/2
+- 끝(0.5원 화폐단위 X)
+리즘 다이어그램기반으로 자바코딩테스트예정(깃 it강의저장소자료이용).
+
+#### 20210716(금) 작업.
+- 수업전 헤로쿠에 배포 후 어제 작업한 결과 확인해 보겠습니다.-오후수업전 다시확인
+- jsp템플릿인 tiles(타일즈) 사용.
+- jsp템플릿인 tiles(타일즈), siteMesh(사이트메쉬), velocity(벨로시티) 등이 있습니다.
+- 현업에서는 위 3가지 템플릿중 1가지는 항상 사용하기 때문에 대표적으로 타일즈를 실습할 예정입니다.
+- 위 3가지 구조는 비슷하기 때문에 1가지만 아셔도 다른 jsp템플릿 적용시 응용가능합니다.
+- 타일즈역할: jsp템플릿이리고 하고, jsp구조(레이아웃)를 쳬계적으로 관리하는 모듈
+- include(header.jsp,footer.jsp) 를 대체 합니다.
+작업순서:
+- 1. pom.xml 타일즈 모듈 라이브러리 추가OK.
+- 2. tiles-context.xml 타일즈설정파일 추가OK.
+- 3. servlet-context.xml 에서 타일즈용 뷰리졸버 빈 추가OK.
+- 4. 위 설정파일을 기준으로 tiles폴더 및 layouts폴더 생성 후 layout.jsp생성OK.
+- 5. 기존 home/include 폴더의 header.jsp 와 footer.jsp 파일 복사해서 그대로 사용OK.
+- 6. 기존 home/index.jsp 파일 그대로 복사해서 tiles/index.jsp로 복사해서 @include 삭제만 처리OK.
+- 7. HomeController 에서 기존 @RequestMapping 복사해서 타일즈용으로 추가OK.
+- -------------------------------------------------------
+- 알고리즘 다이어그램기반으로 자바코딩테스트(깃 it강의저장소자료이용)OK.
+
+```
+import java.io.BufferedReader; //키보드 입력 때문에 필요
+import java.io.InputStreamReader; //기보드 입력 때문에 필요
+import java.util.Arrays; //오름차순 정렬때문에 필요
+class Main {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N;
 		int[] questions;
 		N = Integer.parseInt(br.readLine());//키보드로 입력받는 커서가 나옴
-		//System.out.println("키보드로 입력한 값은" + N);
-		questions = new int[N];//키보드로 입력한 값 N으로 난이도 배열의 크기를 지정함.
-		String str = br.readLine();//키보드 입력	받는 커서가 나옴. 단, 숫자 사이에 공백을 집어 넣음.
-		//문자열로 입력 받은 문자를 questions 정수형 배열 변수에 하나씩 입력함.
+		//System.out.println("키보드로 입력한 값은 " + N);
+		questions = new int[N];//키보드로 입력한 값N으로 난이도배열의 크기를 지정합니다.
+		String str = br.readLine();//키보드 입력받는 커서가 나옴. 단, 숫자사이에 공백을 집어넣습니다.
+		//문자열로 입력 받은 문자를 questions 정수형배열변수에 하나씩 입력합니다.
 		String[] strArray = str.split(" ");
 		for(int i=0;i<N;i++) {
 			questions[i] = Integer.parseInt(strArray[i]);
 		}
-	//System.out.println("난이도 입력값" + Arrays.toString(questions));
-		Arrays.sort(questions);//입력 받은 questions배열을 오름차순 정렬
+		//System.out.println("난이도 입력값 " + Arrays.toString(questions));
+		Arrays.sort(questions);//입력받은 questions배열을 오름차순 정렬
 		int count = 0;
 		int before = questions[0];
 		//int current = 0;
@@ -66,112 +327,168 @@ class Main {
 			if(before != current) {
 				count = count + 1;
 			}
-			if(count == 2) {break;}
+			if(count == 2) { break; }
 			before = current;
 		}
 		if(count >= 2) {
-			System.out.println("Yes");
-		}else{
-			System.out.println("No");
+			System.out.println("YES");
+		} else {
+			System.out.println("NO");
 		}
 	}
 }
 ```
 
-#### 20210714(수) 작업내용
-- 네아로 로그인 부분 마무리 : 외부 API이고, 네이버 개발자들이 만든 것.
-- 요청 URL생성 -> 인증체크(네이버 로그인 컨트롤러 메서드 추가) -> 성공/실패/취소시, callback URL로 이동해서 처리하는 메서드 생성.
+#### 20210715(목) 작업.
+- 데이터의 이동과 변수값처리 2가지만 아시면, 개발자로 일할 수 있음.
+- 문서작업(제출용)확인OK.(설명 후 작업시간 드릴 예정, 작업시간중 네아로 않되는 분 확인)
+- 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리예정.
+- C:\egov\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\kimilguk-spring5\resources\profile
+- URL로 접근할때는 http://localhost:8080/resources/profile/admin22
+
+#### 20210714(수) 작업.
+- 네아로 로그인 부분 마무리.: 외부API이고, 네이버 개발자들이 만든내용.
+- 요청 URL생성 -> 인증체크(네이버로그인컨트롤러 메서드추가) -> 성공/실패/취소시 callback URL로 이동해서 처리하는 메서드 생성
 - 문서작업(제출용)예정.
-- 관리자 대시보드에서 회원 ID 이미지 업로드 및 보이기 처리 예정.
+- 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리예정.
 - jsp템플릿인 tiles(타일즈) 사용.
 
-#### 20210713(화) 작업내용
-- 사용자단 메인페이지(대시보드) 작업예정
-- 문서작업(제출용)
-- 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현)
-- 네이버 개발자 센터에 가입이 되어 있어야 함.
-- 서비스URL(사이트의 로그인URL) -> 네이버 로그인 폼으로 진행(스프링 시큐리티 로그인 무시)
-- 네이버 로그인 폼에서 인증을 받으면(RestAPI에서 OAuth2.0인증) -> 서비스 되는 사이트로 돌아오기(사이트URL필요=@RequestMapping필요 = 콜백URL필요):스프링 시큐리티 로직을 타야 함.
-- 콜백 메서드에서 하는 작업 : enabled, ROLE_USER권한부여, session_값 지정을 할 수 있음.
-- login_success는 스프링시큐리티의 인증성공 후 이동할 URL위치 메서드
-- naver_callback은 네이버 OAuth2.0 인증성공 후 이동할 URL위치를 구현한 메서드
+#### 20210713(화) 작업.
+- 사용자단 메인페이지(대시보드) 작업OK.
+- 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현).
+- 네이버 개발자 센터에 가입이 되어 있어야 합니다.
+- 서비스URL(사이트의 로그인URL) -> 네이버로그인폼으로진행(스프링시큐리티로그인무시)
+- 네이버로그인폼에서 인증을 받으면(RestAPI에서 OAuth2.0인증) -> 서비스되는 사이트로 돌아오기(사이트URL필요=@RequestMapping필요=콜백URL필요):시프링시큐리티 로직을 타야 합니다.
+- 콜백메서드에서 하는 작업: enabled, ROLE_USER권하부여 , session_값 지정을 할 수 있습니다.
+- login_success는 스프링시큐리티의 인증성공 후 이동할 URL위치를 구현한 메서드
+- naver_callback은 네이버OAuth2.0 인증성공 후 이동할 URL위치를 구현한 메서드
 
-#### 20210709(금) 작업내용
-- 게시물 CRUD시 본인글 인지 확인하는 메서드를 공통으로 구현하기(많이 사용하는 방향으로)
-- 사용자단 댓글서비스 작업.
-- Ajax소스는 프로그램이기 때문에, 디자인과 크게 관련 없기에 admin단 board_view에 있는 ajax코드를 가져다가 사용하면서 커스터마이징($.ajax에서 complete, beforsSend, async 속성들)
-- Ajax에서 디버그 하는 방법.
-- 순서1: 외부 모듈 라이브러리 추가(pom.xml에서) -> 메이븐 업데이트 ->
-- 순서2:
+#### 20210709(금) 작업.
+- 게시물 CRUD시 본인글 인지 확인 하는 메서드를 공통으로 구현하기(많이사용하는 방향으로)OK.
 
-- 헤로쿠 30분 지나서 휴면모드로 들어가기 전, 잠깨우는 기능 추가 예정(스프링 스케쥴러 사용)
-- 보통 스프링 스케쥴러를 이용해서 회원들에게 시간 기준의 특별한 이벤트가 발생할 때, 일괄적으로 메일  보내기 기능에 사용.
-- 이력서 작업한 URL을 포트폴리오로 적어 놓을 때, 면접관이 1분 정도 대기시간이 필요.
-- 헤로쿠 클라우드는 처음 접속시 1분 정도 대기시간이 필요함(이력서에 명시)
+```
+@Around("execution(* com.edu.controller.HomeController.board_delete(..)) || execution(* com.edu.controller.HomeController.board_update*(..))")
+    public Object board_deleteMethod(ProceedingJoinPoint pjp) throws Throwable {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		if(request != null) {//jsp에서 Get,Post 있을때,
+			BoardVO boardVO = null;
+			String user_id = null;
+			Integer bno = null;
+			logger.info("디버그 메서드네임 가져오기 : " + pjp.getSignature().getName());//기술참조 https://alwayspr.tistory.com/34
+			for(Object object:pjp.getArgs()) {
+				if(object instanceof Integer) {//AOP실행메서드중 매개변수 판단
+					//파마미터가 bno일때 게시판의 writer를 가져오기
+					bno = (Integer) object;
+					boardVO = boardService.readBoard(bno);//아래 조건때문에 추가
+					user_id = boardVO.getWriter();
+				}
+				if(object instanceof BoardVO) {
+					//파라미터가 BoardVO 클래스객체 일때 writer를 가져오기
+					boardVO = (BoardVO) object;
+					user_id = boardVO.getWriter();
+				}
+			}
+			HttpSession session = request.getSession();//클라이언트PC에서 스프링프로젝트 접근시 세션객체
+			if( !user_id.equals(session.getAttribute("session_userid")) && "ROLE_USER".equals(session.getAttribute("session_levels")) ) {
+				FlashMap flashMap = new FlashMap();
+				flashMap.put("msgError", "게시물은 본인글만 수정/삭제 가능합니다.");
+				FlashMapManager flashMapManager = RequestContextUtils.getFlashMapManager(request);
+				flashMapManager.saveOutputFlashMap(flashMap, request, null);
+				String referer = request.getHeader("Referer");//크롬>네트워크>파일>Referer>이전페이지 URL이 존재
+				return "redirect:"+referer;
+			}
+		}
+		Object result = pjp.proceed();//여기서 조인포인트가 실행됩니다.
+		return result;
+	}
+```
+- 사용자단 댓글서비스 작업.(기술참조: http://www.ktword.co.kr/abbr_view.php?m_temp1=5782 )
+- Ajax소스는 프로그램이기 때문에, 디자인과 크게관련없기때문에, admin단 board_view에 있는 
+- ajax코드를 가져다가 사용하면서 커스터마이징.($.ajax에서 complete, beforeSend, async 속성들)
+- ajax에서 디버그하는 방법.
+- 헤로쿠 30분 지나서 휴면모드로 들어가기전, 잠깨우는 기능 추가예정.(스프링 스케줄링사용)
+- 순서1: 외부 모듈 라이브러리 추가(pom.xml에서) -> 메이븐업데이트 -> 
+- 순서2: 스케줄링할 메서드 생성(herokuJobMethod) -> root-context에서 스케줄링 스프링빈 생성
+- 보통 스프링스케줄러를 이용해서 회원들에게 시간기준의 특별한 이벤트가 발생할때, 일괄적으로 메일보내기 기능에 사용.
+- 이력서 작업한 URL을 포트폴리오로 적어 놓으실때, 면접관이 1분정도 대기시간이 필요.
+- 헤로쿠클라우드는 처음접속시 1분정도 대기시간이 필요함(이력서에 명시)
 
-#### 20210708(목) 작업내용
-- 사용자단 게시물관리 CRUD중 Delete마무리 후, Update실습
-- 우리나라 스프링기반 솔루션을 만들던 시기(스프링 버전 2.5 - 2015년 전후) RestAPI(jsonview방식), 현재(2021년 스프링 버전 5.x 사용) Rest-Api(@RestController방식-,@ResponseBody)
-- properties파일 hsql을,cloud로 통일.
-- JsonView방식(고전 방식의 RestAPI처리) 실습
-- JsonView: 컨트롤러에서 뷰단을 반환할 때 .jps(생략) 파일명으로 반환(View리졸버의 기본형식)
-- servlet_cntext.xml에 위 View리졸버라는 스프링빈 설정이 있음.
-- 리퀘스트 매핑 요청에 대힌 뷰단을 해석(바인딩 해줌)
-- 위 기능을 RestAPI로 대체해서 컨트롤러에서 뷰단은 반환할 때 jsp로 반환하지 않고, json으로 뷰를 반환하는 것을 JsonView 방식이라고 함.
-- JsonView방식 사용방법: 1. servlet설정에 스프링빈을 등록함.(클래스는 스프링 프레임워크에 내장, pom.xml외부 라이브러리모듈을 가져올 필요가 없음.)
-- 사용자단에서는 글수정을 글쓴 본인 글만 삭제 가능하게 기능추가.(단, 관리자단에서는 admin은 모두 수정/삭제 가능)
+#### 20210708(목) 작업.
+- 사용자단 게시물관리 CRUD중 Delete마무리 후, Update 실습
+- 우리나라 스프링기반 솔루션을 만들던 시기(스프링버전2.5 - 2015년 전후) Rest-Api(jsonview방식), 현재(2021년 스프링버전 5.x사용) Rest-Api(@RestController방식-,@ResponseBody)
+- properties파일을 hsql,cloude 를 1개 cloud통일
+- JsonView방식(고전방식의 RestAPI처리) 실습.
+- JsonView: 컨트롤러에서 뷰단을 반환할때 .jsp(생략)파일명으로 반환(View리졸버의 기본형식)
+- servlet-context.xml에 위 View리졸버라는 스프링빈 설정이 있습니다.
+- 리퀘스트매핑요청에대한 뷰단을 해석(바인딩해 줍니다.)
+- 위 기능을 RestAPI로 대체해서 컨트롤러에서 뷰단을 반환할때 jsp로 반환하지 않고, Json으로 뷰를 반환하는 것을 JsonView 방식이라고 합니다.
+- JsonView방식 사용방법: 1. servlet설정에 스프링빈을 등록합니다.(클래스는 스프링프레임워크에 내장, pom.xml외부 라이브러리모듈을 가져올 필요 없음.)
+- 사용자단에서는 글수정을 글쓴 보인글만 삭제/수정 가능하게 기능추가.(단, 관리자단에서는 admin은 모두 수정/삭제가능)
 
+#### 20210707(수) 작업.
+- 헤로쿠는 30분간 아무작업이 없으면 휴면상태(컨테이너가 내려감) -> 활성상태(컨테이너가 올라감)
+- 컨테이너가 올라가면, 클라우드 자원을 차지하기 때문, 휴면에서 활성화 될때 무료버전은 저장소가 신규생성됩니다.
+- 사용자단 게시물관리 CRUD작업추가진행.
 
-#### 20210707(수) 작업내용
-- 헤로쿠는 30분간 아무 작업이 없으면 휴면상태(컨테이너 내려감) -> 활성상태(컨테이너가 올라감)
-- 컨테이너가 올라가면, 클라우드 자원을 차지 때문. 휴면에서 활성화 될 때 무료 버전은 저장소가 신규 생성 됨.
-- 사용자단 게시물관리 CRUD작업 추가 진행.
-- 사용자단 메인페이지(대시보드) 작업예정.
-
-
-#### 20210706(화) 작업내용
+#### 20210706(화) 작업.
 - Hsql데이터베이스는 특징? 메모리DB이기 때문에, 보통 서버를 리스타트하면 DB가 리셋됨(초기화)
-- 데모사이트나, 프로그램의 프로토타입(데모프로그램)생성시 주로 사용.
-- 메모리 DB를 우리 프로젝트에서는 file로 변경해서, 톰캣을 리스타트해도 없어지지 않게 처리했음.
-- 스프링 1개 프로젝트: 3개월, 5~7명(개발인원), 1Man/1Month 금액을 산출.
-- 280 ~ 650: 400만 = 2800만/1달 = 3달 = 8400만 + 1년 2000만 = 보통 1억 이상
-- 7명 : PM(프로젝트 매니저)1명-코딩없이 클라이언트와 소통, PL(프로젝트 리더)1명, 개발자(백엔드)3명
-- 디자이너(프론트엔드)1명 + 문서작업 1명.
-- 실습: CRUD기본, -> 웹프로그램을 제작(구체적인 것은 나중에)
-- 수업전 mysql폴더의 replyMapper.xml쿼리파일에서 아래 내용대로 변경해야 함.
-- [수정전] limit #{pageVO.queryStatNo}, #{pageVO.queryPerPageNum}
+- Hsql은 트랜잭션 기능이 않됨.
+- 데모사이트나, 프로그램의 프로토타입(데모프로그램) 생성시 주로 사용.
+- 메모리 DB를 우리프로젝트에서는 file로 변경해서 , 톰캣을 리스타트해도 없어지지 않게 처리했음.
+- 스프링 1개프로젝트 : 3개월, 5~7명(개발인원), 1Man/1Month 금액을 산출.
+- 280 ~ 650: 400만 = 2800만/1달 = 3달 = 8400만 + 1년유지보수 2000만 = 2억/2000만유지보수 보통 이상
+- 7명: PM(프로젝트매니저)1명-코딩없이 클라이언트와 소통, PL(프로젝트리더)1명, 백엔드개발자(3명), 디자이너(프론트엔드개발1명)+문서작업(1명)
+- 실습: CRUD기본, -> 웹프로그램을 제작(구체적인것은 나중에...)
+- 수업전 mysql폴더의 replyMapper.xml 쿼리파일에서 아래 내용대로 변경합니다.
+- [수정전] limit #{pageVO.queryStartNo}, #{pageVO.queryPerPageNum}
 - [수정후] limit #{queryStartNo}, #{queryPerPageNum}
-- JUnit(스프링테스트방법) - 부메랑(RestAPI컨트롤러테스트 방법)
-- 스프링백엔드단(logger,이클립스 콘솔에서 디버그)
-- 스프링RestAPI단-Ajax(로거디비거로 하지 않고, RestAPI리턴값으로 디버그)
-- 관리자단 대시보드 작업. 기반직업에 사용 - 사용자단 메인 최신갤러리, 최신 공지사항 출력에 사용.
-- 컴파일 된 jsp(import 자바변수값이 들어감)와 컴파일 되기 전 jsp(자바변수값 안들어감.)
-- 사용자단 게시물관리 CRUD작업 진행.
-- 사용자단 메인페이지(대시보드)작업예정
+- JUnit(스프링테스트방법) - 부메랑(RestApi컨트롤러테스트방법)
+- 스프링백엔드단(logger,이클립스콘솔에서디버그) 
+- 스프링RestApi단=Ajax(로거디버거로하지않고, RestApi리턴값으로 디버그)
+- 관리자단 대시보드 작업. 기반작업에 사용 - 사용자단 메인 최신겔러리, 최신 공지사항 출력에 사용
+- 컴파일 된 jsp(import자바변수값이 들어감)와 컴파일 되기전 jsp(include자바변수값 않들어감)
 
-#### 20210705(월) 작업내용.
+#### 20210705(월) 작업.
 - App name = Host name = 호스트네임.herokuapp.com(호스트네임<도메인네임)
-- 클라우드 콘테이너 생성시 위 와같은 방식으로 호스트네임 도메인을 부여 함..
-- 헤로쿠 클라우드 App 생성
-- Deploy에서 에러 : No Web processes running
-- 현재 프로젝트에 클라우드용 설정파일이 필요 = 헤로쿠에서 procfile 확장자 없는 설정파일이 필요.
-- 위  Procfile에서 web processes running 시키는 라인이 추가 되어야 함.
-- 스프링에서 작업해서 배포한다는 의미: All or NotAll
-- PHP 작업한  개별파일 1개씩 수정 올리는 방식 (워드프레스, 그누보드 등등)
-- 스프링은 작업한 파일이 1개라도 1개만 올리는 것이 아니고, 모든 파일을 컴파일해서 패키징(war파일)한 후 업로드 함.
-- hsqlDB 외부모듈 pom.xml에 추가.(자바 기반 DB사용 가능)
-- 우리 프로젝트에 HsqlDB를 생성(메이븐에서 Hsql모듈을 업데이트 하면, 사용가능)
-- 오라클은 로컬에서 개발, HsqlDB는 헤로쿠 클라우드용을 개발할 수 있도록 root.context.xml에서 설정예정.
-- 현재 까지 작업한 소스를 본인 이름 도메인으로 배포예정. ryujiyoon-spring5.herokuapp.com
-- 아래 3가지가 root-context에 추가 됨.
+- 클라우드 콘테이너 생성시 위 와같은 방식으로 호스트네임 도메인을 부여 합니다.
+- 헤로쿠 클라우드에서 App 생성
+- Deploy에서 에러: No web processes running
+- 현재 프로젝트에 클라우드용 설정파일이 필요 = 헤로쿠에서 Procfile 확장자없는 설정파일이 필요
+- 위 Procfile에서 web processes running 시키는 라인이 추가 되어야 함.
+- 스프링에서 작업해서 배포한다는 의미: ALL or Not ALL
+- PHP는 작업한 개별파일 1개씩 수정해서 올리는 방식(워드프레스, 그누보드 등등)
+- 스프링은 작업한 파일이 1개라도 1개만 올리는 것이 아니고, 모든파일을 컴파일해서 패키징(war파일)한 후 업로드 합니다.
+- hsqldb 외부모듈 pom.xml에 추가.(자바기반 DB사용가능)
+- 우리프로젝트에 HsqlDB를 생성.(메이븐에서 Hsql모듈을 업데이트하면, 사용가능)
+- 오라클은 로컬에서 개발, HsqlDB는 헤로쿠 클라우드용을 개발할 수 있도록 root-context.xml에서 설정예정.
+- 아래 3가지가 root-context에 추가 됩니다.
 - 1. hsql용 jdbc드라이버를 스프링빈으로 생성하기
 - 2. DB생성 스크립트 실행
-- 3. DB매니저 실행하기.
+- 3. DB매니저실행하기
+- 현재 까지 작업한 소스를 여러분 이름 도메인으로배포예정 kimilguk-spring5.herokuapp.com
 
-#### 20210702(금) 작업예정
-- 수정/탈퇴(마이페이지) jsp기능 추가 마무리.
-- 사용자단 회원가입 작업예정.
-- 사용자단 에러 발생시 예쁘게 처리
+#### 20210702(금) 작업.
+- 수정/탈퇴(마이페이지) JSP기능 추가 마무리OK.
+- 사용자단 회원가입 작업OK.
+- form폼에서 name은 VO/매퍼쿼리 필드명동일, id는 선택해서 jsp(UI)단에서 제어(j쿼리)할때 사용.
+- 사용자단 에러발생시 이쁘게 보이게 화면처리.
+- error_spring.jsp 만듭니다.
+- 위 jsp를 에러발생시(Exception) 무조건 나오게 처리: AOP중 @ControllerAdvice로 구현합니다.
+- 위 어드바이스컨트롤러에서 에러메세지를 캐치해서 jsp에러페이지로 보내서, 에레메세지를 이쁘게 확인합니다.
+- 404에러는 컨트롤러에서 발생되지 않습니다. 그래서, 별도파일을 만들어야 합니다.
+- 톰캣서버에서 발생되는 에러코드404이기 때문에 web.xml에서 설정을 추가합니다.
+- 404코드가 발생시 error_404.jsp와 바인딩되는 설정입니다.
+- 홈컨트롤러에서 Get /home/error/error_404경로추가
+- -----------------------------------------
+- 헤로쿠 클라우드에 배포준비예정.
+- 헤로쿠 클라우드는 미국의 회사로서 컨테이너를 제공하는 회사
+- 컨테이너는 리눅스OS>톰캣WAS>자바JVM>스프링>컨테이너에 포함됨 기본.
+- 외부 서버는(DB) Add on이라는 이름으로 사용가능
+- 무료: PostgeresDB(조건없음), 마리아DB(신용카드등록필수)
+- 유료: Mysql(유료)
+- HsqlDB로 연동해서 헤로쿠에 배포예정. http://hsqldb.org/
+- 100% Java Database: 임베디드DB, 메모리DB, 서버를 설치할 필요 Hsql이라는 Maven모듈만 있으면가능
+- 프로토타입 작업시 주로 사용.(특징, 쿼리는 Mysql과 99% 동일)
 
 #### 20210701(목) 작업.
 - 어제 작업한 security-context를 데이터 변수값의 이동기준으로 다시 설명.
@@ -200,10 +517,6 @@ class Main {
 <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 ```
 - 스프링시큐리티 로그인및 권한체크 설정 후 사용자단 로그인 구현 예정.(관리자단 끝 이면서, 사용자단 시작): 사용자단 로그인 / 로그아웃 기능 처리OK.
-- 사용자단 회원가입, 수정/탈퇴(마이페이지) JSP기능 추가예정.
-- 관리자단 대시보드 작업예정.
-- 사용자단 게시물관리 CRUD작업예정.
-- 사용자단 메인페이지(대시보드) 작업예정.
 
 #### 20210630(수) 작업.
 - 댓글 Delete 구현 후 마무리OK.
@@ -751,20 +1064,281 @@ DROP USER XE2 CASCADE;--XE2사용자를 지울때,
 - 관리자단 게시물관리 CRUD 처리(4.파일업로드구현,5.트랜잭션구현).
 - 관리자단 댓글 CRUD 처리(6.RestAPI기능구현-개발트렌드).
 - 관리자단 왼쪽메뉴 UI 메뉴 고정시키기(7.jQuery로 구현).-관리자단 마무리.
-- ---------------------
 - 사용자단 로그인 화면 JSP로 만들기.
 - 로그인처리 및 관리자 권한체크 기능 추가(8.스프링시큐리티구현).
-- ======== 3주간 작업내역 끝(07.02금) ===================
-- ======== 2주간 작업내역 시작 (사용자단은 관리자단 로직을 사용합니다.)========
 - 사용자단 회원가입, 수정, 탈퇴 JSP기능 추가.
+- 헤로쿠 클라우드 준비작업.
+- 관리자단 대시보드작업.
 - 사용자단 게시판 CRUD 처리.
-- 사용자단 댓글 CRUD 처리.
 - 헤로쿠 클라우드에 배포(9.클라우드 배포CI/CD구현-개발트렌드).깃(최신소스)-연동-헤로쿠(배포)
-- 문서작업(제출용)
-- [실습시간이 가능하다면: 알고리즘 다이어그램기반으로 자바코딩테스트]
-- [실습시간이 가능하다면: 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현).]
-- ======== 2주간 작업내역 끝(07.16금) ===================
+- 사용자단 댓글 CRUD 처리.
+- 문서작업(제출용)OK.
+- 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리OK.
+- 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현)OK.
 - 헤로쿠 클라우드에 배포할때, 매퍼폴더의 mysql폴더내의 쿼리에 now()를 date_add(now(3), interval 9 HOUR) 변경예정.(이유는 DB서버 타임존 미국이기 때문에)
+- 알고리즘 다이어그램기반으로 자바 코딩테스트 작업시작
+#### 작업일정.
+- 7월9일(금) 모두 줌으로 수업
+- 7월12(월) 학원이사로 휴강
+- 7월13(화) 이사한 학원에서 수업시작(A조대면,B조줌)
+- 7월20(화) 강사 김일국 수업 종료.
+
+#### 앞으로 남은 1주일간 작업예정내용 정리.
+- 사용자단 메인페이지(대시보드) 작업예정.
+- 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현).
+- 문서작업(제출용)예정.
+- 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리예정.(기술참조 https://github.com/miniplugin/kimilguk )
+- jsp템플릿인 tiles(타일즈), siteMesh(사이트메쉬), velocity(벨로시티) 등이 있습니다.
+- 현업에서는 위 3가지 템플릿중 1가지는 항상 사용하기 때문에 대표적으로 타일즈를 실습할 예정입니다.
+- 위 3가지 구조는 비슷하기 때문에 1가지만 아셔도 다른 jsp템플릿 적용시 응용가능합니다.
+- 알고리즘 다이어그램기반으로 자바코딩테스트예정(깃 it강의저장소자료이용).
+- 코딩테스트 3가지: 1. dev구름처럼 온라인 코딩테스트.(디버그)
+- 2. 회사에서 PC제공해서 PC의 이클립스에서 코딩테스트.(디버그)
+- 3. 회사에서 종이에 코딩테스트: 수두코딩(Pseudo-code)로 로직만 검사하는 테스트.(디버그X)
+- 문제를 분석 -> 다이어그램만들기 -> 자바코딩 테스트
+- 10개 다이어그램 -> 자바코딩 테스트
+#### 데이터의 이동
+- VO클래스의 이동: 매퍼쿼리<->DAO(M)<->Service<->Controller(C)<->jsp(V)
+
+#### 변수값(데이터) ReplyVO데이터클래스를 기준으로
+- JSON데이터: 크롬에서 부메랑으로 List<ReaplyVO>형태의 데이터확인
+- JSON데이터구조: ArrayList(표) + HashMap(Key:Value)
+
+```
+{
+    "rno": 4,
+    "reply_text": "부메랑댓글 입력테스트",
+    "replyer": "admin",
+    "reg_date": 1626310996371,
+    "update_date": 1626310996371,
+    "bno": 2
+},
+{
+    "rno": 3,
+    "reply_text": "부메랑댓글 입력테스트",
+    "replyer": "admin",
+    "reg_date": 1626310964420,
+    "update_date": 1626310964420,
+    "bno": 2
+}
+```
+- ArrayList데이터형:List<ReplyVO> replyList = new ArrayList<ReplyVO>();//DB쿼리결과
+- 위 ArrayList구조: List(인터페이스) > ArrayList(임플리먼트클래스-데이터클래스)
+- HashMap데이터형:Map<String,Object> mapData = new HashMap<String,Object>();
+- 위 HashMap구조: Map(인터페이스-메서드명) > HashMap(구현클래스)
+- Hash해시태그: 그물망(해시)=#=좌표(x,y)=(Key:Value)
+
+#### 20210719(월) 작업예정.
+- 알고리즘 다이어그램기반으로 자바코딩테스트예정(깃 it강의저장소자료이용).
+
+#### 20210716(금) 작업.
+- 수업전 헤로쿠에 배포 후 어제 작업한 결과 확인해 보겠습니다.-오후수업전 다시확인
+- jsp템플릿인 tiles(타일즈) 사용.
+- jsp템플릿인 tiles(타일즈), siteMesh(사이트메쉬), velocity(벨로시티) 등이 있습니다.
+- 현업에서는 위 3가지 템플릿중 1가지는 항상 사용하기 때문에 대표적으로 타일즈를 실습할 예정입니다.
+- 위 3가지 구조는 비슷하기 때문에 1가지만 아셔도 다른 jsp템플릿 적용시 응용가능합니다.
+- 타일즈역할: jsp템플릿이리고 하고, jsp구조(레이아웃)를 쳬계적으로 관리하는 모듈
+- include(header.jsp,footer.jsp) 를 대체 합니다.
+작업순서:
+- 1. pom.xml 타일즈 모듈 라이브러리 추가OK.
+- 2. tiles-context.xml 타일즈설정파일 추가OK.
+- 3. servlet-context.xml 에서 타일즈용 뷰리졸버 빈 추가OK.
+- 4. 위 설정파일을 기준으로 tiles폴더 및 layouts폴더 생성 후 layout.jsp생성OK.
+- 5. 기존 home/include 폴더의 header.jsp 와 footer.jsp 파일 복사해서 그대로 사용OK.
+- 6. 기존 home/index.jsp 파일 그대로 복사해서 tiles/index.jsp로 복사해서 @include 삭제만 처리OK.
+- 7. HomeController 에서 기존 @RequestMapping 복사해서 타일즈용으로 추가OK.
+- -------------------------------------------------------
+- 알고리즘 다이어그램기반으로 자바코딩테스트(깃 it강의저장소자료이용)OK.
+
+```
+import java.io.BufferedReader; //키보드 입력 때문에 필요
+import java.io.InputStreamReader; //기보드 입력 때문에 필요
+import java.util.Arrays; //오름차순 정렬때문에 필요
+class Main {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N;
+		int[] questions;
+		N = Integer.parseInt(br.readLine());//키보드로 입력받는 커서가 나옴
+		//System.out.println("키보드로 입력한 값은 " + N);
+		questions = new int[N];//키보드로 입력한 값N으로 난이도배열의 크기를 지정합니다.
+		String str = br.readLine();//키보드 입력받는 커서가 나옴. 단, 숫자사이에 공백을 집어넣습니다.
+		//문자열로 입력 받은 문자를 questions 정수형배열변수에 하나씩 입력합니다.
+		String[] strArray = str.split(" ");
+		for(int i=0;i<N;i++) {
+			questions[i] = Integer.parseInt(strArray[i]);
+		}
+		//System.out.println("난이도 입력값 " + Arrays.toString(questions));
+		Arrays.sort(questions);//입력받은 questions배열을 오름차순 정렬
+		int count = 0;
+		int before = questions[0];
+		//int current = 0;
+		for(int current:questions) {
+			if(before != current) {
+				count = count + 1;
+			}
+			if(count == 2) { break; }
+			before = current;
+		}
+		if(count >= 2) {
+			System.out.println("YES");
+		} else {
+			System.out.println("NO");
+		}
+	}
+}
+```
+
+#### 20210715(목) 작업.
+- 데이터의 이동과 변수값처리 2가지만 아시면, 개발자로 일할 수 있음.
+- 문서작업(제출용)확인OK.(설명 후 작업시간 드릴 예정, 작업시간중 네아로 않되는 분 확인)
+- 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리예정.
+- C:\egov\workspace\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\kimilguk-spring5\resources\profile
+- URL로 접근할때는 http://localhost:8080/resources/profile/admin22
+
+#### 20210714(수) 작업.
+- 네아로 로그인 부분 마무리.: 외부API이고, 네이버 개발자들이 만든내용.
+- 요청 URL생성 -> 인증체크(네이버로그인컨트롤러 메서드추가) -> 성공/실패/취소시 callback URL로 이동해서 처리하는 메서드 생성
+- 문서작업(제출용)예정.
+- 관리자대시보드에서 회원ID 이미지업로드 및 보이기 처리예정.
+- jsp템플릿인 tiles(타일즈) 사용.
+
+#### 20210713(화) 작업.
+- 사용자단 메인페이지(대시보드) 작업OK.
+- 사용자단 네이버아이디로그인 처리(10.외부RestAPI구현).
+- 네이버 개발자 센터에 가입이 되어 있어야 합니다.
+- 서비스URL(사이트의 로그인URL) -> 네이버로그인폼으로진행(스프링시큐리티로그인무시)
+- 네이버로그인폼에서 인증을 받으면(RestAPI에서 OAuth2.0인증) -> 서비스되는 사이트로 돌아오기(사이트URL필요=@RequestMapping필요=콜백URL필요):시프링시큐리티 로직을 타야 합니다.
+- 콜백메서드에서 하는 작업: enabled, ROLE_USER권하부여 , session_값 지정을 할 수 있습니다.
+- login_success는 스프링시큐리티의 인증성공 후 이동할 URL위치를 구현한 메서드
+- naver_callback은 네이버OAuth2.0 인증성공 후 이동할 URL위치를 구현한 메서드
+
+#### 20210709(금) 작업.
+- 게시물 CRUD시 본인글 인지 확인 하는 메서드를 공통으로 구현하기(많이사용하는 방향으로)OK.
+
+```
+@Around("execution(* com.edu.controller.HomeController.board_delete(..)) || execution(* com.edu.controller.HomeController.board_update*(..))")
+    public Object board_deleteMethod(ProceedingJoinPoint pjp) throws Throwable {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		if(request != null) {//jsp에서 Get,Post 있을때,
+			BoardVO boardVO = null;
+			String user_id = null;
+			Integer bno = null;
+			logger.info("디버그 메서드네임 가져오기 : " + pjp.getSignature().getName());//기술참조 https://alwayspr.tistory.com/34
+			for(Object object:pjp.getArgs()) {
+				if(object instanceof Integer) {//AOP실행메서드중 매개변수 판단
+					//파마미터가 bno일때 게시판의 writer를 가져오기
+					bno = (Integer) object;
+					boardVO = boardService.readBoard(bno);//아래 조건때문에 추가
+					user_id = boardVO.getWriter();
+				}
+				if(object instanceof BoardVO) {
+					//파라미터가 BoardVO 클래스객체 일때 writer를 가져오기
+					boardVO = (BoardVO) object;
+					user_id = boardVO.getWriter();
+				}
+			}
+			HttpSession session = request.getSession();//클라이언트PC에서 스프링프로젝트 접근시 세션객체
+			if( !user_id.equals(session.getAttribute("session_userid")) && "ROLE_USER".equals(session.getAttribute("session_levels")) ) {
+				FlashMap flashMap = new FlashMap();
+				flashMap.put("msgError", "게시물은 본인글만 수정/삭제 가능합니다.");
+				FlashMapManager flashMapManager = RequestContextUtils.getFlashMapManager(request);
+				flashMapManager.saveOutputFlashMap(flashMap, request, null);
+				String referer = request.getHeader("Referer");//크롬>네트워크>파일>Referer>이전페이지 URL이 존재
+				return "redirect:"+referer;
+			}
+		}
+		Object result = pjp.proceed();//여기서 조인포인트가 실행됩니다.
+		return result;
+	}
+```
+- 사용자단 댓글서비스 작업.(기술참조: http://www.ktword.co.kr/abbr_view.php?m_temp1=5782 )
+- Ajax소스는 프로그램이기 때문에, 디자인과 크게관련없기때문에, admin단 board_view에 있는 
+- ajax코드를 가져다가 사용하면서 커스터마이징.($.ajax에서 complete, beforeSend, async 속성들)
+- ajax에서 디버그하는 방법.
+- 헤로쿠 30분 지나서 휴면모드로 들어가기전, 잠깨우는 기능 추가예정.(스프링 스케줄링사용)
+- 순서1: 외부 모듈 라이브러리 추가(pom.xml에서) -> 메이븐업데이트 -> 
+- 순서2: 스케줄링할 메서드 생성(herokuJobMethod) -> root-context에서 스케줄링 스프링빈 생성
+- 보통 스프링스케줄러를 이용해서 회원들에게 시간기준의 특별한 이벤트가 발생할때, 일괄적으로 메일보내기 기능에 사용.
+- 이력서 작업한 URL을 포트폴리오로 적어 놓으실때, 면접관이 1분정도 대기시간이 필요.
+- 헤로쿠클라우드는 처음접속시 1분정도 대기시간이 필요함(이력서에 명시)
+
+#### 20210708(목) 작업.
+- 사용자단 게시물관리 CRUD중 Delete마무리 후, Update 실습
+- 우리나라 스프링기반 솔루션을 만들던 시기(스프링버전2.5 - 2015년 전후) Rest-Api(jsonview방식), 현재(2021년 스프링버전 5.x사용) Rest-Api(@RestController방식-,@ResponseBody)
+- properties파일을 hsql,cloude 를 1개 cloud통일
+- JsonView방식(고전방식의 RestAPI처리) 실습.
+- JsonView: 컨트롤러에서 뷰단을 반환할때 .jsp(생략)파일명으로 반환(View리졸버의 기본형식)
+- servlet-context.xml에 위 View리졸버라는 스프링빈 설정이 있습니다.
+- 리퀘스트매핑요청에대한 뷰단을 해석(바인딩해 줍니다.)
+- 위 기능을 RestAPI로 대체해서 컨트롤러에서 뷰단을 반환할때 jsp로 반환하지 않고, Json으로 뷰를 반환하는 것을 JsonView 방식이라고 합니다.
+- JsonView방식 사용방법: 1. servlet설정에 스프링빈을 등록합니다.(클래스는 스프링프레임워크에 내장, pom.xml외부 라이브러리모듈을 가져올 필요 없음.)
+- 사용자단에서는 글수정을 글쓴 보인글만 삭제/수정 가능하게 기능추가.(단, 관리자단에서는 admin은 모두 수정/삭제가능)
+
+#### 20210707(수) 작업.
+- 헤로쿠는 30분간 아무작업이 없으면 휴면상태(컨테이너가 내려감) -> 활성상태(컨테이너가 올라감)
+- 컨테이너가 올라가면, 클라우드 자원을 차지하기 때문, 휴면에서 활성화 될때 무료버전은 저장소가 신규생성됩니다.
+- 사용자단 게시물관리 CRUD작업추가진행.
+
+#### 20210706(화) 작업.
+- Hsql데이터베이스는 특징? 메모리DB이기 때문에, 보통 서버를 리스타트하면 DB가 리셋됨(초기화)
+- Hsql은 트랜잭션 기능이 않됨.
+- 데모사이트나, 프로그램의 프로토타입(데모프로그램) 생성시 주로 사용.
+- 메모리 DB를 우리프로젝트에서는 file로 변경해서 , 톰캣을 리스타트해도 없어지지 않게 처리했음.
+- 스프링 1개프로젝트 : 3개월, 5~7명(개발인원), 1Man/1Month 금액을 산출.
+- 280 ~ 650: 400만 = 2800만/1달 = 3달 = 8400만 + 1년유지보수 2000만 = 2억/2000만유지보수 보통 이상
+- 7명: PM(프로젝트매니저)1명-코딩없이 클라이언트와 소통, PL(프로젝트리더)1명, 백엔드개발자(3명), 디자이너(프론트엔드개발1명)+문서작업(1명)
+- 실습: CRUD기본, -> 웹프로그램을 제작(구체적인것은 나중에...)
+- 수업전 mysql폴더의 replyMapper.xml 쿼리파일에서 아래 내용대로 변경합니다.
+- [수정전] limit #{pageVO.queryStartNo}, #{pageVO.queryPerPageNum}
+- [수정후] limit #{queryStartNo}, #{queryPerPageNum}
+- JUnit(스프링테스트방법) - 부메랑(RestApi컨트롤러테스트방법)
+- 스프링백엔드단(logger,이클립스콘솔에서디버그) 
+- 스프링RestApi단=Ajax(로거디버거로하지않고, RestApi리턴값으로 디버그)
+- 관리자단 대시보드 작업. 기반작업에 사용 - 사용자단 메인 최신겔러리, 최신 공지사항 출력에 사용
+- 컴파일 된 jsp(import자바변수값이 들어감)와 컴파일 되기전 jsp(include자바변수값 않들어감)
+
+#### 20210705(월) 작업.
+- App name = Host name = 호스트네임.herokuapp.com(호스트네임<도메인네임)
+- 클라우드 콘테이너 생성시 위 와같은 방식으로 호스트네임 도메인을 부여 합니다.
+- 헤로쿠 클라우드에서 App 생성
+- Deploy에서 에러: No web processes running
+- 현재 프로젝트에 클라우드용 설정파일이 필요 = 헤로쿠에서 Procfile 확장자없는 설정파일이 필요
+- 위 Procfile에서 web processes running 시키는 라인이 추가 되어야 함.
+- 스프링에서 작업해서 배포한다는 의미: ALL or Not ALL
+- PHP는 작업한 개별파일 1개씩 수정해서 올리는 방식(워드프레스, 그누보드 등등)
+- 스프링은 작업한 파일이 1개라도 1개만 올리는 것이 아니고, 모든파일을 컴파일해서 패키징(war파일)한 후 업로드 합니다.
+- hsqldb 외부모듈 pom.xml에 추가.(자바기반 DB사용가능)
+- 우리프로젝트에 HsqlDB를 생성.(메이븐에서 Hsql모듈을 업데이트하면, 사용가능)
+- 오라클은 로컬에서 개발, HsqlDB는 헤로쿠 클라우드용을 개발할 수 있도록 root-context.xml에서 설정예정.
+- 아래 3가지가 root-context에 추가 됩니다.
+- 1. hsql용 jdbc드라이버를 스프링빈으로 생성하기
+- 2. DB생성 스크립트 실행
+- 3. DB매니저실행하기
+- 현재 까지 작업한 소스를 여러분 이름 도메인으로배포예정 kimilguk-spring5.herokuapp.com
+
+#### 20210702(금) 작업.
+- 수정/탈퇴(마이페이지) JSP기능 추가 마무리OK.
+- 사용자단 회원가입 작업OK.
+- form폼에서 name은 VO/매퍼쿼리 필드명동일, id는 선택해서 jsp(UI)단에서 제어(j쿼리)할때 사용.
+- 사용자단 에러발생시 이쁘게 보이게 화면처리.
+- error_spring.jsp 만듭니다.
+- 위 jsp를 에러발생시(Exception) 무조건 나오게 처리: AOP중 @ControllerAdvice로 구현합니다.
+- 위 어드바이스컨트롤러에서 에러메세지를 캐치해서 jsp에러페이지로 보내서, 에레메세지를 이쁘게 확인합니다.
+- 404에러는 컨트롤러에서 발생되지 않습니다. 그래서, 별도파일을 만들어야 합니다.
+- 톰캣서버에서 발생되는 에러코드404이기 때문에 web.xml에서 설정을 추가합니다.
+- 404코드가 발생시 error_404.jsp와 바인딩되는 설정입니다.
+- 홈컨트롤러에서 Get /home/error/error_404경로추가
+- -----------------------------------------
+- 헤로쿠 클라우드에 배포준비예정.
+- 헤로쿠 클라우드는 미국의 회사로서 컨테이너를 제공하는 회사
+- 컨테이너는 리눅스OS>톰캣WAS>자바JVM>스프링>컨테이너에 포함됨 기본.
+- 외부 서버는(DB) Add on이라는 이름으로 사용가능
+- 무료: PostgeresDB(조건없음), 마리아DB(신용카드등록필수)
+- 유료: Mysql(유료)
+- HsqlDB로 연동해서 헤로쿠에 배포예정. http://hsqldb.org/
+- 100% Java Database: 임베디드DB, 메모리DB, 서버를 설치할 필요 Hsql이라는 Maven모듈만 있으면가능
+- 프로토타입 작업시 주로 사용.(특징, 쿼리는 Mysql과 99% 동일)
 
 #### 20210701(목) 작업.
 - 어제 작업한 security-context를 데이터 변수값의 이동기준으로 다시 설명.
@@ -793,10 +1367,6 @@ DROP USER XE2 CASCADE;--XE2사용자를 지울때,
 <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 ```
 - 스프링시큐리티 로그인및 권한체크 설정 후 사용자단 로그인 구현 예정.(관리자단 끝 이면서, 사용자단 시작): 사용자단 로그인 / 로그아웃 기능 처리OK.
-- 사용자단 회원가입, 수정/탈퇴(마이페이지) JSP기능 추가예정.
-- 관리자단 대시보드 작업예정.
-- 사용자단 게시물관리 CRUD작업예정.
-- 사용자단 메인페이지(대시보드) 작업예정.
 
 #### 20210630(수) 작업.
 - 댓글 Delete 구현 후 마무리OK.
